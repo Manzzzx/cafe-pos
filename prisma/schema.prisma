@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  role          Role      @default(CASHIER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  orders        Order[]
+}
+
+model Product {
+  id            String    @id @default(cuid())
+  name          String
+  description   String?
+  price         Float
+  imageUrl      String?
+  sku           String?   @unique
+  stock         Int       @default(0)
+  categoryId    String
+  category      Category  @relation(fields: [categoryId], references: [id])
+  variants      Json?     // { sizes: [], temperatures: [] }
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  orderItems    OrderItem[]
+}
+
+model Category {
+  id            String       @id @default(cuid())
+  name          String
+  description   String?
+  type          CategoryType
+  products      Product[]
+  createdAt     DateTime     @default(now())
+}
+
+model Order {
+  id            String        @id @default(cuid())
+  orderNumber   String        @unique
+  customerName  String?
+  tableNumber   String?
+  notes         String?
+  items         OrderItem[]
+  status        OrderStatus   @default(PENDING)
+  totalAmount   Float
+  taxAmount     Float
+  discount      Float         @default(0)
+  paymentMethod PaymentMethod
+  paymentStatus PaymentStatus @default(PENDING)
+  cashierId     String
+  cashier       User          @relation(fields: [cashierId], references: [id])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model OrderItem {
+  id            String    @id @default(cuid())
+  orderId       String
+  order         Order     @relation(fields: [orderId], references: [id])
+  productId     String
+  product       Product   @relation(fields: [productId], references: [id])
+  quantity      Int       @default(1)
+  variant       Json?     // { size: "Large", temperature: "Hot" }
+  notes         String?
+  price         Float
+  subtotal      Float
+}
+
+enum Role {
+  ADMIN
+  CASHIER
+  BARISTA
+}
+
+enum CategoryType {
+  COFFEE
+  TEA
+  SNACK
+  DESSERT
+}
+
+enum OrderStatus {
+  PENDING
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CASH
+  QRIS
+  CARD
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
