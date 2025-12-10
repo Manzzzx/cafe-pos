@@ -58,7 +58,7 @@ export function AdminLayout({ children, user }: AdminLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-100 to-amber-50/30 flex">
+    <div className="min-h-screen bg-linear-to-br from-stone-100 to-amber-50/30 flex">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -75,11 +75,11 @@ export function AdminLayout({ children, user }: AdminLayoutProps) {
         )}
       >
         {/* Glassmorphism sidebar */}
-        <div className="h-full bg-gradient-to-b from-[#2C1A12] via-[#3d2517] to-[#1a0f0a] text-white flex flex-col shadow-2xl">
+        <div className="h-full bg-linear-to-b from-[#2C1A12] via-[#3d2517] to-[#1a0f0a] text-white flex flex-col shadow-2xl">
           {/* Logo */}
           <div className="h-20 flex items-center justify-between px-6 border-b border-white/10">
             <Link href="/admin/dashboard" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:shadow-amber-500/40 transition-all group-hover:scale-105">
+              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:shadow-amber-500/40 transition-all group-hover:scale-105">
                 <Coffee className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -110,13 +110,13 @@ export function AdminLayout({ children, user }: AdminLayoutProps) {
                     variant="ghost"
                     className={cn(
                       "w-full justify-start gap-3 h-12 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200",
-                      isActive && "bg-gradient-to-r from-amber-500/20 to-orange-500/10 text-white border border-amber-500/20 shadow-lg shadow-amber-500/5"
+                      isActive && "bg-linear-to-r from-amber-500/20 to-orange-500/10 text-white border border-amber-500/20 shadow-lg shadow-amber-500/5"
                     )}
                     onClick={() => setSidebarOpen(false)}
                   >
                     <div className={cn(
                       "w-8 h-8 rounded-lg flex items-center justify-center transition-all",
-                      isActive ? "bg-gradient-to-br from-amber-500 to-orange-600 shadow-md" : "bg-white/5"
+                      isActive ? "bg-linear-to-br from-amber-500 to-orange-600 shadow-md" : "bg-white/5"
                     )}>
                       <Icon className={cn("h-4 w-4", isActive && "text-white")} />
                     </div>
@@ -136,7 +136,7 @@ export function AdminLayout({ children, user }: AdminLayoutProps) {
                   className="w-full justify-start gap-3 h-14 text-white/80 hover:text-white hover:bg-white/10 rounded-xl"
                 >
                   <Avatar className="h-9 w-9 border-2 border-amber-500/30">
-                    <AvatarFallback className="bg-gradient-to-br from-amber-500 to-orange-600 text-white font-semibold">
+                    <AvatarFallback className="bg-linear-to-br from-amber-500 to-orange-600 text-white font-semibold">
                       {user.name?.charAt(0) || user.email?.charAt(0) || "U"}
                     </AvatarFallback>
                   </Avatar>
@@ -177,7 +177,7 @@ export function AdminLayout({ children, user }: AdminLayoutProps) {
             </Button>
 
             <div className="lg:hidden flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center">
                 <Coffee className="w-4 h-4 text-white" />
               </div>
               <span className="font-bold text-stone-800">Coffee POS</span>
@@ -188,7 +188,7 @@ export function AdminLayout({ children, user }: AdminLayoutProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="gap-2 hover:bg-stone-100">
                 <Avatar className="h-8 w-8 border border-stone-200">
-                  <AvatarFallback className="bg-gradient-to-br from-amber-500 to-orange-600 text-white text-sm">
+                  <AvatarFallback className="bg-linear-to-br from-amber-500 to-orange-600 text-white text-sm">
                     {user.name?.charAt(0) || "U"}
                   </AvatarFallback>
                 </Avatar>

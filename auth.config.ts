@@ -15,7 +15,7 @@ function getDashboardByRole(role: string | undefined): string {
     case "CASHIER":
       return "/pos"
     case "BARISTA":
-      return "/dashboard/barista"
+      return "/kitchen"
     default:
       return "/auth/login"
   }

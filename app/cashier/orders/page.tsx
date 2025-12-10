@@ -101,12 +101,12 @@ export default function CashierOrdersPage() {
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 space-y-6 bg-gradient-to-br from-stone-50 to-amber-50/30 min-h-[calc(100vh-3.5rem)]">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 bg-linear-to-br from-stone-50 to-amber-50/30 min-h-[calc(100vh-3.5rem)]">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-stone-800 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
+            <div className="h-10 w-10 rounded-xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
               <ClipboardList className="h-5 w-5 text-white" />
             </div>
             Riwayat Pesanan
@@ -214,7 +214,7 @@ export default function CashierOrdersPage() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center">
                 <Receipt className="h-5 w-5 text-white" />
               </div>
               <div>

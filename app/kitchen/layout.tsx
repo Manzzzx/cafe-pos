@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { BaristaLayout } from "@/components/layout/BaristaLayout"
 
 export default async function KitchenLayout({
   children,
@@ -12,10 +11,5 @@ export default async function KitchenLayout({
   if (!session?.user) {
     redirect("/auth/login")
   }
-
-  return (
-    <BaristaLayout user={session.user}>
-      {children}
-    </BaristaLayout>
-  )
+  return <>{children}</>
 }
