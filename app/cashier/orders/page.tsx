@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,10 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { formatCurrency } from "@/lib/utils"
-import { format } from "date-fns"
-import { id } from "date-fns/locale"
-import { ClipboardList, Eye, Loader2, Coffee, X } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -30,6 +26,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
+import { formatCurrency } from "@/lib/utils"
+import { format } from "date-fns"
+import { id } from "date-fns/locale"
+import { ClipboardList, Eye, Loader2, Coffee, Receipt } from "lucide-react"
 
 interface OrderItem {
   id: string
@@ -37,6 +37,7 @@ interface OrderItem {
   price: number
   subtotal: number
   variant?: { size?: string; temperature?: string } | null
+  notes?: string | null
   product: { name: string }
 }
 
@@ -63,7 +64,7 @@ const statusConfig: Record<string, { color: string; bg: string }> = {
   CANCELLED: { color: "text-red-700", bg: "bg-red-100" },
 }
 
-export default function OrdersPage() {
+export default function CashierOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState<string>("ALL")
@@ -100,14 +101,17 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 space-y-6">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 bg-gradient-to-br from-stone-50 to-amber-50/30 min-h-[calc(100vh-3.5rem)]">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-stone-800 flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
+              <ClipboardList className="h-5 w-5 text-white" />
+            </div>
             Riwayat Pesanan
           </h1>
-          <p className="text-stone-500 mt-1">Lihat dan kelola semua pesanan</p>
+          <p className="text-stone-500 mt-1">Lihat riwayat semua pesanan</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -141,7 +145,7 @@ export default function OrdersPage() {
                   <TableHead className="font-semibold text-stone-600">Pembayaran</TableHead>
                   <TableHead className="font-semibold text-stone-600">Total</TableHead>
                   <TableHead className="font-semibold text-stone-600">Waktu</TableHead>
-                  <TableHead className="text-right font-semibold text-stone-600">Aksi</TableHead>
+                  <TableHead className="text-right font-semibold text-stone-600">Detail</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -183,7 +187,7 @@ export default function OrdersPage() {
                           variant="ghost" 
                           size="icon" 
                           onClick={() => setSelectedOrder(order)}
-                          className="h-8 w-8 hover:bg-blue-50 hover:text-blue-600"
+                          className="h-8 w-8 hover:bg-amber-50 hover:text-amber-600"
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -205,27 +209,30 @@ export default function OrdersPage() {
         </CardContent>
       </Card>
 
-      {/* Order Detail Dialog */}
+      {/* Order Detail Dialog (Read Only) */}
       <Dialog open={!!selectedOrder} onOpenChange={() => setSelectedOrder(null)}>
         <DialogContent className="max-w-md">
-          <DialogHeader className="pb-4">
-            <DialogTitle className="text-xl flex items-center justify-between">
-              <span>Detail Pesanan</span>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                <Receipt className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <p className="font-semibold">Detail Pesanan</p>
+                <p className="text-sm text-stone-500 font-normal">{selectedOrder?.orderNumber}</p>
+              </div>
             </DialogTitle>
           </DialogHeader>
           {selectedOrder && (
-            <div className="space-y-4">
-              {/* Order Header */}
-              <div className="flex items-center justify-between p-4 rounded-xl bg-stone-50">
-                <div>
-                  <span className="font-mono text-lg font-bold text-stone-800">{selectedOrder.orderNumber}</span>
-                  <p className="text-xs text-stone-400 mt-0.5">
-                    {format(new Date(selectedOrder.createdAt), "dd MMMM yyyy, HH:mm", { locale: id })}
-                  </p>
-                </div>
+            <div className="space-y-4 mt-2">
+              {/* Status & Time */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-stone-50">
                 <Badge className={`${statusConfig[selectedOrder.status]?.bg} ${statusConfig[selectedOrder.status]?.color} border-0`}>
                   {selectedOrder.status}
                 </Badge>
+                <span className="text-sm text-stone-500">
+                  {format(new Date(selectedOrder.createdAt), "dd MMM yyyy, HH:mm", { locale: id })}
+                </span>
               </div>
 
               {/* Customer Info */}
@@ -245,16 +252,21 @@ export default function OrdersPage() {
               <div className="space-y-2">
                 <p className="text-sm font-medium text-stone-600">Item Pesanan</p>
                 {selectedOrder.items.map((item) => (
-                  <div key={item.id} className="flex justify-between items-center text-sm p-2 rounded-lg bg-stone-50/50">
-                    <div>
-                      <span className="font-medium">{item.quantity}x</span> {item.product.name}
-                      {item.variant && (
-                        <span className="text-stone-400 ml-1 text-xs">
-                          ({item.variant.size}, {item.variant.temperature})
-                        </span>
-                      )}
+                  <div key={item.id} className="p-2 rounded-lg bg-stone-50/50">
+                    <div className="flex justify-between items-start text-sm">
+                      <div>
+                        <span className="font-medium">{item.quantity}x</span> {item.product.name}
+                        {item.variant && (
+                          <span className="text-stone-400 ml-1 text-xs">
+                            ({item.variant.size}, {item.variant.temperature})
+                          </span>
+                        )}
+                        {item.notes && (
+                          <p className="text-xs text-amber-600 mt-0.5">📝 {item.notes}</p>
+                        )}
+                      </div>
+                      <span className="font-medium text-stone-700">{formatCurrency(item.subtotal)}</span>
                     </div>
-                    <span className="font-medium text-stone-700">{formatCurrency(item.subtotal)}</span>
                   </div>
                 ))}
               </div>
@@ -276,8 +288,8 @@ export default function OrdersPage() {
               {/* Payment Info */}
               <div className="flex gap-2 pt-2">
                 <Badge variant="secondary" className="bg-stone-100">{selectedOrder.paymentMethod}</Badge>
-                <Badge variant={selectedOrder.paymentStatus === "PAID" ? "default" : "outline"}
-                  className={selectedOrder.paymentStatus === "PAID" ? "bg-emerald-100 text-emerald-700" : ""}
+                <Badge 
+                  className={selectedOrder.paymentStatus === "PAID" ? "bg-emerald-100 text-emerald-700" : "bg-yellow-100 text-yellow-700"}
                 >
                   {selectedOrder.paymentStatus}
                 </Badge>

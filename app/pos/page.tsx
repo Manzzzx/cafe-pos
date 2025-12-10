@@ -27,6 +27,7 @@ export default function POSPage() {
       productId: product.id,
       name: product.name,
       price: product.price,
+      imageUrl: product.imageUrl,
       quantity: 1,
       variant,
     })
@@ -37,11 +38,11 @@ export default function POSPage() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Product Grid */}
+    <div className="flex h-screen overflow-hidden bg-stone-100">
+      {/* Product Grid - Scrollable */}
       <ProductGrid onAddToCart={handleAddToCart} />
 
-      {/* Cart Sidebar */}
+      {/* Cart Sidebar - Fixed */}
       <CartSidebar onCheckout={handleCheckout} />
     </div>
   )

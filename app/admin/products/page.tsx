@@ -249,9 +249,6 @@ export default function ProductsPage() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-stone-800 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
-              <Package className="h-5 w-5 text-white" />
-            </div>
             Manajemen Produk
           </h1>
           <p className="text-stone-500 mt-1">Kelola produk coffee shop</p>
@@ -273,7 +270,7 @@ export default function ProductsPage() {
             if (!open) resetForm()
           }}>
             <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 shadow-lg shadow-amber-500/25">
+              <Button className="bg-linear-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 shadow-lg shadow-amber-500/25">
                 <Plus className="h-4 w-4 mr-2" />
                 Tambah Produk
               </Button>
@@ -409,7 +406,7 @@ export default function ProductsPage() {
                 <div className="flex gap-3 pt-4">
                   <Button 
                     type="submit" 
-                    className="flex-1 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
+                    className="flex-1 bg-linear-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
                     disabled={saving || uploading}
                   >
                     {saving ? (
@@ -450,7 +447,7 @@ export default function ProductsPage() {
                   <TableRow key={product.id} className="hover:bg-amber-50/30 transition-colors">
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl flex items-center justify-center overflow-hidden">
+                        <div className="w-12 h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-xl flex items-center justify-center overflow-hidden">
                           {product.imageUrl ? (
                             <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
                           ) : (

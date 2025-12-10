@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 
 const rolePermissions: Record<string, string[]> = {
   ADMIN: ["/admin", "/api"],
-  CASHIER: ["/dashboard/cashier", "/pos", "/api/products", "/api/categories", "/api/orders"],
+  CASHIER: ["/pos", "/cashier", "/api/products", "/api/categories", "/api/orders"],
   BARISTA: ["/dashboard/barista", "/kitchen", "/api/orders"],
 }
 
@@ -13,7 +13,7 @@ function getDashboardByRole(role: string | undefined): string {
     case "ADMIN":
       return "/admin/dashboard"
     case "CASHIER":
-      return "/dashboard/cashier"
+      return "/pos"
     case "BARISTA":
       return "/dashboard/barista"
     default:

@@ -163,7 +163,7 @@ export default async function AdminDashboardPage() {
                   <span className="text-stone-400">vs kemarin</span>
                 </div>
               </div>
-              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+              <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
                 <DollarSign className="h-7 w-7 text-white" />
               </div>
             </div>
@@ -191,7 +191,7 @@ export default async function AdminDashboardPage() {
                   <span className="text-stone-400">vs kemarin</span>
                 </div>
               </div>
-              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+              <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
                 <ShoppingCart className="h-7 w-7 text-white" />
               </div>
             </div>
@@ -206,7 +206,7 @@ export default async function AdminDashboardPage() {
                 <p className="text-2xl font-bold text-stone-800">{stats.todayItemsSold}</p>
                 <p className="text-xs text-stone-400">hari ini</p>
               </div>
-              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
+              <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
                 <Coffee className="h-7 w-7 text-white" />
               </div>
             </div>
@@ -221,7 +221,7 @@ export default async function AdminDashboardPage() {
                 <p className="text-2xl font-bold text-stone-800">{formatCurrency(stats.avgOrderValue)}</p>
                 <p className="text-xs text-stone-400">per transaksi</p>
               </div>
-              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
+              <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
                 <TrendingUp className="h-7 w-7 text-white" />
               </div>
             </div>
@@ -245,7 +245,7 @@ export default async function AdminDashboardPage() {
               return (
                 <Link href={link.href} key={link.href}>
                   <div className="flex items-center gap-4 p-3 rounded-xl hover:bg-stone-50 transition-colors cursor-pointer group">
-                    <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${link.color} flex items-center justify-center shadow-md group-hover:scale-105 transition-transform`}>
+                    <div className={`h-10 w-10 rounded-xl bg-linear-to-br ${link.color} flex items-center justify-center shadow-md group-hover:scale-105 transition-transform`}>
                       <Icon className="h-5 w-5 text-white" />
                     </div>
                     <div className="flex-1">
@@ -273,7 +273,7 @@ export default async function AdminDashboardPage() {
                 stats.recentOrders.map((order) => (
                   <div key={order.id} className="flex items-center justify-between p-3 rounded-xl bg-stone-50/50 hover:bg-stone-50 transition-colors">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-sm">
+                      <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-sm">
                         {order.items.length}
                       </div>
                       <div>

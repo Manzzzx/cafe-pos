@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { CashierLayout } from "@/components/layout/CashierLayout"
 
-export default async function DashboardCashierLayout({
+export default async function CashierOrdersLayout({
   children,
 }: {
   children: React.ReactNode

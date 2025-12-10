@@ -14,11 +14,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
-  LayoutDashboard,
   ShoppingCart,
   ClipboardList,
   LogOut,
   ChevronDown,
+  Coffee,
 } from "lucide-react"
 
 interface CashierLayoutProps {
@@ -31,9 +31,8 @@ interface CashierLayoutProps {
 }
 
 const menuItems = [
-  { href: "/dashboard/cashier", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/pos", label: "Kasir (POS)", icon: ShoppingCart },
-  { href: "/admin/orders", label: "Riwayat Pesanan", icon: ClipboardList },
+  { href: "/pos", label: "Kasir", icon: ShoppingCart },
+  { href: "/cashier/orders", label: "Riwayat Pesanan", icon: ClipboardList },
 ]
 
 export function CashierLayout({ children, user }: CashierLayoutProps) {
@@ -44,20 +43,21 @@ export function CashierLayout({ children, user }: CashierLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-stone-100">
       {/* Top Navigation */}
-      <header className="h-16 bg-[#2C1A12] text-white flex items-center justify-between px-4 lg:px-6">
+      <header className="h-14 bg-gradient-to-r from-amber-600 to-orange-600 text-white flex items-center justify-between px-4 lg:px-6 shadow-lg shadow-amber-500/20">
         <div className="flex items-center gap-6">
-          <Link href="/dashboard/cashier" className="flex items-center gap-2">
-            <span className="text-2xl">☕</span>
+          <Link href="/pos" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+              <Coffee className="h-5 w-5 text-white" />
+            </div>
             <span className="font-bold text-lg hidden sm:inline">Coffee POS</span>
           </Link>
 
           <nav className="flex items-center gap-1">
             {menuItems.map((item) => {
               const Icon = item.icon
-              const isActive = pathname === item.href || 
-                (item.href !== "/dashboard/cashier" && pathname.startsWith(item.href))
+              const isActive = pathname === item.href || pathname.startsWith(item.href)
 
               return (
                 <Link key={item.href} href={item.href}>
@@ -65,8 +65,8 @@ export function CashierLayout({ children, user }: CashierLayoutProps) {
                     variant="ghost"
                     size="sm"
                     className={cn(
-                      "text-white/70 hover:text-white hover:bg-white/10",
-                      isActive && "bg-white/10 text-white"
+                      "text-white/80 hover:text-white hover:bg-white/20",
+                      isActive && "bg-white/20 text-white font-medium"
                     )}
                   >
                     <Icon className="h-4 w-4 mr-2" />
@@ -80,9 +80,9 @@ export function CashierLayout({ children, user }: CashierLayoutProps) {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="gap-2 text-white hover:bg-white/10">
+            <Button variant="ghost" className="gap-2 text-white hover:bg-white/20">
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-[#6F4E37] text-white">
+                <AvatarFallback className="bg-white/20 text-white font-bold">
                   {user.name?.charAt(0) || "U"}
                 </AvatarFallback>
               </Avatar>
@@ -104,7 +104,7 @@ export function CashierLayout({ children, user }: CashierLayoutProps) {
       </header>
 
       {/* Page content */}
-      <main className="min-h-[calc(100vh-4rem)]">
+      <main className="min-h-[calc(100vh-3.5rem)]">
         {children}
       </main>
     </div>
