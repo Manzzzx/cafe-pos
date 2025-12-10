@@ -91,7 +91,7 @@ export function ProductGrid({ onAddToCart }: ProductGridProps) {
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-gradient-to-br from-stone-50 to-amber-50/30 overflow-hidden">
+    <div className="flex-1 flex flex-col bg-linear-to-br from-stone-50 to-amber-50/30 overflow-hidden">
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-md border-b border-stone-200/50 p-4 space-y-4">
         {/* Search */}
@@ -112,7 +112,7 @@ export function ProductGrid({ onAddToCart }: ProductGridProps) {
             size="sm"
             onClick={() => setActiveCategory(null)}
             className={activeCategory === null 
-              ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white border-0 shadow-lg shadow-amber-500/25" 
+              ? "bg-linear-to-r from-amber-500 to-orange-600 text-white border-0 shadow-lg shadow-amber-500/25" 
               : "bg-white border-stone-200 hover:bg-stone-50"
             }
           >
@@ -131,7 +131,7 @@ export function ProductGrid({ onAddToCart }: ProductGridProps) {
                 size="sm"
                 onClick={() => setActiveCategory(category.id)}
                 className={isActive 
-                  ? `bg-gradient-to-r ${colorClass} text-white border-0 shadow-lg` 
+                  ? `bg-linear-to-r ${colorClass} text-white border-0 shadow-lg` 
                   : "bg-white border-stone-200 hover:bg-stone-50"
                 }
               >
