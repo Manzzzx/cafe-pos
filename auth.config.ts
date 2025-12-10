@@ -2,9 +2,8 @@ import type { NextAuthConfig } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { NextResponse } from "next/server"
 
-// Role permissions
 const rolePermissions: Record<string, string[]> = {
-  ADMIN: ["/dashboard/admin", "/admin", "/pos", "/kitchen", "/api"],
+  ADMIN: ["/admin", "/api"],
   CASHIER: ["/dashboard/cashier", "/pos", "/api/products", "/api/categories", "/api/orders"],
   BARISTA: ["/dashboard/barista", "/kitchen", "/api/orders"],
 }
@@ -12,7 +11,7 @@ const rolePermissions: Record<string, string[]> = {
 function getDashboardByRole(role: string | undefined): string {
   switch (role) {
     case "ADMIN":
-      return "/dashboard/admin"
+      return "/admin/dashboard"
     case "CASHIER":
       return "/dashboard/cashier"
     case "BARISTA":
@@ -22,7 +21,6 @@ function getDashboardByRole(role: string | undefined): string {
   }
 }
 
-// Edge-compatible auth config (no Prisma)
 export const authConfig: NextAuthConfig = {
   session: { strategy: "jwt" },
   pages: {
