@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -29,7 +29,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { formatCurrency } from "@/lib/utils"
-import { Plus, Pencil, Trash2, Package, Search, Coffee, Loader2 } from "lucide-react"
+import { Plus, Pencil, Trash2, Package, Search, Coffee, Loader2, Upload, X, ImageIcon } from "lucide-react"
 
 interface Category {
   id: string
@@ -54,9 +54,12 @@ export default function ProductsPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [formData, setFormData] = useState({
     name: "",
@@ -83,6 +86,66 @@ export default function ProductsPage() {
       console.error("Failed to fetch data:", error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"]
+    if (!allowedTypes.includes(file.type)) {
+      alert("Format file tidak valid. Hanya JPG, PNG, dan WebP yang diperbolehkan.")
+      return
+    }
+
+    // Validate file size (2MB max)
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Ukuran file terlalu besar. Maksimal 2MB.")
+      return
+    }
+
+    // Show preview
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string)
+    }
+    reader.readAsDataURL(file)
+
+    // Upload file
+    setUploading(true)
+    try {
+      const formDataUpload = new FormData()
+      formDataUpload.append("file", file)
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataUpload,
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        setFormData({ ...formData, imageUrl: data.url })
+      } else {
+        alert(data.error || "Gagal upload gambar")
+        setImagePreview(null)
+      }
+    } catch (error) {
+      console.error("Upload error:", error)
+      alert("Gagal upload gambar")
+      setImagePreview(null)
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  const removeImage = () => {
+    setImagePreview(null)
+    setFormData({ ...formData, imageUrl: "" })
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
     }
   }
 
@@ -144,6 +207,7 @@ export default function ProductsPage() {
       imageUrl: product.imageUrl || "",
       isActive: product.isActive,
     })
+    setImagePreview(product.imageUrl || null)
     setDialogOpen(true)
   }
 
@@ -157,6 +221,10 @@ export default function ProductsPage() {
       imageUrl: "",
       isActive: true,
     })
+    setImagePreview(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
   }
 
   const filteredProducts = products.filter(p => 
@@ -210,13 +278,80 @@ export default function ProductsPage() {
                 Tambah Produk
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md">
+            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="text-xl">
                   {editingProduct ? "Edit Produk" : "Tambah Produk Baru"}
                 </DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                {/* Image Upload */}
+                <div className="space-y-2">
+                  <Label>Gambar Produk</Label>
+                  <div className="flex flex-col items-center gap-3">
+                    {/* Preview */}
+                    <div className="relative w-full h-40 bg-stone-100 rounded-xl border-2 border-dashed border-stone-300 flex items-center justify-center overflow-hidden">
+                      {imagePreview ? (
+                        <>
+                          <img 
+                            src={imagePreview} 
+                            alt="Preview" 
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={removeImage}
+                            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </>
+                      ) : (
+                        <div className="text-center">
+                          {uploading ? (
+                            <Loader2 className="h-8 w-8 animate-spin mx-auto text-amber-600" />
+                          ) : (
+                            <>
+                              <ImageIcon className="h-10 w-10 mx-auto text-stone-400 mb-2" />
+                              <p className="text-sm text-stone-500">Klik atau drag gambar</p>
+                              <p className="text-xs text-stone-400">JPG, PNG, WebP (Max 2MB)</p>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Upload Button */}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      id="image-upload"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploading}
+                      className="w-full"
+                    >
+                      {uploading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Mengupload...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="h-4 w-4 mr-2" />
+                          {imagePreview ? "Ganti Gambar" : "Upload Gambar"}
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="name">Nama Produk</Label>
                   <Input
@@ -271,21 +406,11 @@ export default function ProductsPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="imageUrl">URL Gambar</Label>
-                  <Input
-                    id="imageUrl"
-                    value={formData.imageUrl}
-                    onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                    placeholder="https://..."
-                  />
-                </div>
-
                 <div className="flex gap-3 pt-4">
                   <Button 
                     type="submit" 
                     className="flex-1 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
-                    disabled={saving}
+                    disabled={saving || uploading}
                   >
                     {saving ? (
                       <>
