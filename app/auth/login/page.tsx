@@ -30,7 +30,8 @@ export default function LoginPage() {
       setError("Email atau password salah")
       setLoading(false)
     } else {
-      router.push("/dashboard/admin") // TODO: redirect by role
+      // Redirect to root - middleware will redirect to correct dashboard based on role
+      router.push("/")
       router.refresh()
     }
   }
