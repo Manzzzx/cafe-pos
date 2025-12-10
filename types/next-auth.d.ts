@@ -1,6 +1,7 @@
-import { Role } from "@/lib/generated/prisma/enums"
 import "next-auth"
 import "next-auth/jwt"
+
+type Role = "ADMIN" | "CASHIER" | "BARISTA"
 
 declare module "next-auth" {
   interface User {
@@ -18,7 +19,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT {
-    role?: string
+    role?: Role
     id?: string
   }
 }

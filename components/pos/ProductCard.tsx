@@ -17,7 +17,9 @@ interface ProductCardProps {
     name: string
     price: number
     imageUrl?: string | null
+    categoryId: string
     variants?: ProductVariants | null
+    category: { id: string; name: string }
   }
   onAddToCart: (product: ProductCardProps["product"], variant?: { size?: string; temperature?: string }) => void
 }
