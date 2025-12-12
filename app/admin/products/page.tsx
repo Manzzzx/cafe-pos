@@ -29,7 +29,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { formatCurrency } from "@/lib/utils"
-import { Plus, Pencil, Trash2, Package, Search, Coffee, Loader2, Upload, X, ImageIcon } from "lucide-react"
+import { Plus, Pencil, Trash2, Package, Search, Coffee, Loader2, Upload, X, ImageIcon, Thermometer, Snowflake } from "lucide-react"
+import { Checkbox } from "@/components/ui/checkbox"
 
 interface Category {
   id: string
@@ -68,6 +69,10 @@ export default function ProductsPage() {
     categoryId: "",
     imageUrl: "",
     isActive: true,
+    hasTemperatureVariant: false,
+    hasSizeVariant: false,
+    temperatures: ["Hot", "Iced"] as string[],
+    sizes: ["Regular", "Large"] as string[],
   })
 
   useEffect(() => {
@@ -153,6 +158,11 @@ export default function ProductsPage() {
     e.preventDefault()
     setSaving(true)
     
+    const variants = (formData.hasTemperatureVariant || formData.hasSizeVariant) ? {
+      temperatures: formData.hasTemperatureVariant ? formData.temperatures : undefined,
+      sizes: formData.hasSizeVariant ? formData.sizes : undefined,
+    } : null
+    
     const payload = {
       name: formData.name,
       description: formData.description || null,
@@ -160,6 +170,7 @@ export default function ProductsPage() {
       categoryId: formData.categoryId,
       imageUrl: formData.imageUrl || null,
       isActive: formData.isActive,
+      variants,
     }
 
     try {
@@ -199,6 +210,8 @@ export default function ProductsPage() {
 
   const openEditDialog = (product: Product) => {
     setEditingProduct(product)
+    const hasTemp = !!(product.variants?.temperatures && product.variants.temperatures.length > 0)
+    const hasSize = !!(product.variants?.sizes && product.variants.sizes.length > 0)
     setFormData({
       name: product.name,
       description: product.description || "",
@@ -206,6 +219,10 @@ export default function ProductsPage() {
       categoryId: product.categoryId,
       imageUrl: product.imageUrl || "",
       isActive: product.isActive,
+      hasTemperatureVariant: hasTemp,
+      hasSizeVariant: hasSize,
+      temperatures: product.variants?.temperatures || ["Hot", "Iced"],
+      sizes: product.variants?.sizes || ["Regular", "Large"],
     })
     setImagePreview(product.imageUrl || null)
     setDialogOpen(true)
@@ -220,6 +237,10 @@ export default function ProductsPage() {
       categoryId: "",
       imageUrl: "",
       isActive: true,
+      hasTemperatureVariant: false,
+      hasSizeVariant: false,
+      temperatures: ["Hot", "Iced"],
+      sizes: ["Regular", "Large"],
     })
     setImagePreview(null)
     if (fileInputRef.current) {
@@ -400,6 +421,102 @@ export default function ProductsPage() {
                         ))}
                       </SelectContent>
                     </Select>
+                  </div>
+                </div>
+
+                {/* Variants Section */}
+                <div className="space-y-4 pt-2 border-t border-stone-200">
+                  <Label className="text-sm font-semibold">Varian Produk</Label>
+                  
+                  {/* Temperature Variant */}
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="hasTemperature"
+                        checked={formData.hasTemperatureVariant}
+                        onCheckedChange={(checked: boolean) => 
+                          setFormData({ ...formData, hasTemperatureVariant: checked })
+                        }
+                      />
+                      <Label htmlFor="hasTemperature" className="cursor-pointer flex items-center gap-2">
+                        <Thermometer className="h-4 w-4 text-orange-500" />
+                        Hot / Iced
+                      </Label>
+                    </div>
+                    {formData.hasTemperatureVariant && (
+                      <div className="ml-6 flex gap-2">
+                        {["Hot", "Iced"].map((temp) => (
+                          <label
+                            key={temp}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-full border cursor-pointer transition-colors ${
+                              formData.temperatures.includes(temp)
+                                ? "bg-amber-100 border-amber-400 text-amber-800"
+                                : "bg-white border-stone-200 text-stone-600 hover:border-stone-300"
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={formData.temperatures.includes(temp)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setFormData({ ...formData, temperatures: [...formData.temperatures, temp] })
+                                } else {
+                                  setFormData({ ...formData, temperatures: formData.temperatures.filter(t => t !== temp) })
+                                }
+                              }}
+                              className="hidden"
+                            />
+                            {temp === "Iced" ? <Snowflake className="h-3 w-3" /> : <Thermometer className="h-3 w-3" />}
+                            <span className="text-sm">{temp}</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Size Variant */}
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="hasSize"
+                        checked={formData.hasSizeVariant}
+                        onCheckedChange={(checked: boolean) => 
+                          setFormData({ ...formData, hasSizeVariant: checked })
+                        }
+                      />
+                      <Label htmlFor="hasSize" className="cursor-pointer flex items-center gap-2">
+                        <Package className="h-4 w-4 text-blue-500" />
+                        Ukuran (Size)
+                      </Label>
+                    </div>
+                    {formData.hasSizeVariant && (
+                      <div className="ml-6 flex gap-2">
+                        {["Regular", "Large"].map((size) => (
+                          <label
+                            key={size}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-full border cursor-pointer transition-colors ${
+                              formData.sizes.includes(size)
+                                ? "bg-blue-100 border-blue-400 text-blue-800"
+                                : "bg-white border-stone-200 text-stone-600 hover:border-stone-300"
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={formData.sizes.includes(size)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setFormData({ ...formData, sizes: [...formData.sizes, size] })
+                                } else {
+                                  setFormData({ ...formData, sizes: formData.sizes.filter(s => s !== size) })
+                                }
+                              }}
+                              className="hidden"
+                            />
+                            <span className="text-sm">{size}</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 

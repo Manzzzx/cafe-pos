@@ -93,31 +93,37 @@ export default function CashierOrdersPage() {
     return (
       <div className="flex items-center justify-center h-[60vh]">
         <div className="text-center space-y-3">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto text-amber-600" />
-          <p className="text-stone-500">Memuat data...</p>
+          <Loader2 className="h-8 w-8 animate-spin mx-auto" style={{ color: 'var(--coffee-caramel)' }} />
+          <p style={{ color: 'var(--coffee-primary)' }}>Memuat data...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 space-y-6 bg-linear-to-br from-stone-50 to-amber-50/30 min-h-[calc(100vh-3.5rem)]">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 min-h-[calc(100vh-3.5rem)]" style={{ background: 'linear-gradient(135deg, var(--coffee-bg) 0%, var(--coffee-cream) 100%)' }}>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-stone-800 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
+          <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-3" style={{ color: 'var(--coffee-dark)' }}>
+            <div 
+              className="h-10 w-10 rounded-xl flex items-center justify-center shadow-lg"
+              style={{ 
+                background: 'linear-gradient(135deg, var(--coffee-primary) 0%, var(--coffee-dark) 100%)',
+                boxShadow: '0 4px 12px rgba(60, 42, 33, 0.3)'
+              }}
+            >
               <ClipboardList className="h-5 w-5 text-white" />
             </div>
             Riwayat Pesanan
           </h1>
-          <p className="text-stone-500 mt-1">Lihat riwayat semua pesanan</p>
+          <p style={{ color: 'var(--coffee-primary)' }} className="mt-1">Lihat riwayat semua pesanan</p>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-sm text-stone-500">Filter:</span>
+          <span className="text-sm" style={{ color: 'var(--coffee-primary)' }}>Filter:</span>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-40 bg-white border-stone-200">
+            <SelectTrigger className="w-40 bg-white rounded-full" style={{ borderColor: 'var(--coffee-latte)' }}>
               <SelectValue placeholder="Filter status" />
             </SelectTrigger>
             <SelectContent>
@@ -133,19 +139,19 @@ export default function CashierOrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white overflow-hidden">
+      <Card className="border-0 shadow-lg bg-white overflow-hidden rounded-2xl" style={{ boxShadow: '0 10px 25px rgba(60, 42, 33, 0.1)' }}>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-stone-50/50 hover:bg-stone-50/50">
-                  <TableHead className="font-semibold text-stone-600">No. Pesanan</TableHead>
-                  <TableHead className="font-semibold text-stone-600">Pelanggan</TableHead>
-                  <TableHead className="font-semibold text-stone-600">Status</TableHead>
-                  <TableHead className="font-semibold text-stone-600">Pembayaran</TableHead>
-                  <TableHead className="font-semibold text-stone-600">Total</TableHead>
-                  <TableHead className="font-semibold text-stone-600">Waktu</TableHead>
-                  <TableHead className="text-right font-semibold text-stone-600">Detail</TableHead>
+                <TableRow style={{ backgroundColor: 'var(--coffee-cream)' }}>
+                  <TableHead className="font-semibold" style={{ color: 'var(--coffee-dark)' }}>No. Pesanan</TableHead>
+                  <TableHead className="font-semibold" style={{ color: 'var(--coffee-dark)' }}>Pelanggan</TableHead>
+                  <TableHead className="font-semibold" style={{ color: 'var(--coffee-dark)' }}>Status</TableHead>
+                  <TableHead className="font-semibold" style={{ color: 'var(--coffee-dark)' }}>Pembayaran</TableHead>
+                  <TableHead className="font-semibold" style={{ color: 'var(--coffee-dark)' }}>Total</TableHead>
+                  <TableHead className="font-semibold" style={{ color: 'var(--coffee-dark)' }}>Waktu</TableHead>
+                  <TableHead className="text-right font-semibold" style={{ color: 'var(--coffee-dark)' }}>Detail</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -153,14 +159,14 @@ export default function CashierOrdersPage() {
                   const statusStyle = statusConfig[order.status] || statusConfig.PENDING
                   return (
                     <TableRow key={order.id} className="hover:bg-amber-50/30 transition-colors">
-                      <TableCell className="font-mono font-semibold text-stone-700">
+                      <TableCell className="font-mono font-semibold" style={{ color: 'var(--coffee-dark)' }}>
                         {order.orderNumber}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <span className="text-stone-700">{order.customerName || "Guest"}</span>
+                          <span style={{ color: 'var(--coffee-dark)' }}>{order.customerName || "Guest"}</span>
                           {order.tableNumber && (
-                            <Badge variant="outline" className="text-xs border-stone-200">
+                            <Badge variant="outline" className="text-xs" style={{ borderColor: 'var(--coffee-latte)' }}>
                               Meja {order.tableNumber}
                             </Badge>
                           )}
@@ -172,14 +178,14 @@ export default function CashierOrdersPage() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="secondary" className="bg-stone-100 text-stone-600">
+                        <Badge variant="secondary" style={{ backgroundColor: 'var(--coffee-cream)', color: 'var(--coffee-dark)' }}>
                           {order.paymentMethod}
                         </Badge>
                       </TableCell>
-                      <TableCell className="font-semibold text-amber-700">
+                      <TableCell className="font-semibold" style={{ color: 'var(--coffee-caramel)' }}>
                         {formatCurrency(order.totalAmount)}
                       </TableCell>
-                      <TableCell className="text-sm text-stone-500">
+                      <TableCell className="text-sm" style={{ color: 'var(--coffee-primary)' }}>
                         {format(new Date(order.createdAt), "dd MMM, HH:mm", { locale: id })}
                       </TableCell>
                       <TableCell className="text-right">
@@ -187,7 +193,8 @@ export default function CashierOrdersPage() {
                           variant="ghost" 
                           size="icon" 
                           onClick={() => setSelectedOrder(order)}
-                          className="h-8 w-8 hover:bg-amber-50 hover:text-amber-600"
+                          className="h-8 w-8 rounded-full hover:bg-amber-50"
+                          style={{ color: 'var(--coffee-primary)' }}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -198,8 +205,10 @@ export default function CashierOrdersPage() {
                 {filteredOrders.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-12">
-                      <Coffee className="h-12 w-12 mx-auto mb-3 text-stone-300" />
-                      <p className="text-stone-400">Tidak ada pesanan</p>
+                      <div className="w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--coffee-cream)' }}>
+                        <Coffee className="h-8 w-8" style={{ color: 'var(--coffee-latte)' }} />
+                      </div>
+                      <p style={{ color: 'var(--coffee-primary)' }}>Tidak ada pesanan</p>
                     </TableCell>
                   </TableRow>
                 )}
@@ -211,15 +220,18 @@ export default function CashierOrdersPage() {
 
       {/* Order Detail Dialog (Read Only) */}
       <Dialog open={!!selectedOrder} onOpenChange={() => setSelectedOrder(null)}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md rounded-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+              <div 
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, var(--coffee-primary) 0%, var(--coffee-dark) 100%)' }}
+              >
                 <Receipt className="h-5 w-5 text-white" />
               </div>
               <div>
-                <p className="font-semibold">Detail Pesanan</p>
-                <p className="text-sm text-stone-500 font-normal">{selectedOrder?.orderNumber}</p>
+                <p className="font-semibold" style={{ color: 'var(--coffee-dark)' }}>Detail Pesanan</p>
+                <p className="text-sm font-normal" style={{ color: 'var(--coffee-primary)' }}>{selectedOrder?.orderNumber}</p>
               </div>
             </DialogTitle>
           </DialogHeader>
@@ -275,13 +287,13 @@ export default function CashierOrdersPage() {
 
               {/* Totals */}
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-stone-500">
+                <div className="flex justify-between" style={{ color: 'var(--coffee-primary)' }}>
                   <span>Pajak</span>
                   <span>{formatCurrency(selectedOrder.taxAmount)}</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold">
-                  <span>Total</span>
-                  <span className="text-amber-600">{formatCurrency(selectedOrder.totalAmount)}</span>
+                  <span style={{ color: 'var(--coffee-dark)' }}>Total</span>
+                  <span style={{ color: 'var(--coffee-caramel)' }}>{formatCurrency(selectedOrder.totalAmount)}</span>
                 </div>
               </div>
 
