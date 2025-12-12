@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 
 const rolePermissions: Record<string, string[]> = {
   ADMIN: ["/admin", "/api"],
-  CASHIER: ["/pos", "/cashier", "/api/products", "/api/categories", "/api/orders"],
+  CASHIER: ["/pos", "/api/products", "/api/categories", "/api/orders"],
   BARISTA: ["/dashboard/barista", "/kitchen", "/api/orders"],
 }
 

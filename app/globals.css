@@ -120,3 +120,159 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Coffee Theme Color Variables */
+:root {
+  --coffee-primary: #6F4E37;
+  --coffee-primary-light: #8B6C5C;
+  --coffee-dark: #3C2A21;
+  --coffee-darker: #2C1810;
+  --coffee-cream: #F5F0E1;
+  --coffee-latte: #D7C4A0;
+  --coffee-caramel: #D4A574;
+  --coffee-accent: #C9A66B;
+  --coffee-bg: #FAF8F5;
+  --coffee-success: #4A7C59;
+  --coffee-success-light: #5A8C69;
+}
+
+/* Coffee Theme Utilities */
+.bg-coffee-gradient {
+  background: linear-gradient(135deg, var(--coffee-primary) 0%, var(--coffee-dark) 100%);
+}
+
+.bg-coffee-light-gradient {
+  background: linear-gradient(135deg, var(--coffee-bg) 0%, var(--coffee-cream) 100%);
+}
+
+.text-coffee-primary {
+  color: var(--coffee-primary);
+}
+
+.text-coffee-dark {
+  color: var(--coffee-dark);
+}
+
+.text-coffee-caramel {
+  color: var(--coffee-caramel);
+}
+
+.bg-coffee-primary {
+  background-color: var(--coffee-primary);
+}
+
+.bg-coffee-cream {
+  background-color: var(--coffee-cream);
+}
+
+.bg-coffee-bg {
+  background-color: var(--coffee-bg);
+}
+
+.border-coffee-primary {
+  border-color: var(--coffee-primary);
+}
+
+.border-coffee-latte {
+  border-color: var(--coffee-latte);
+}
+
+/* Pill Button Styling */
+.btn-pill {
+  border-radius: 9999px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.btn-coffee-primary {
+  background: linear-gradient(135deg, var(--coffee-primary) 0%, var(--coffee-dark) 100%);
+  color: white;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.btn-coffee-primary:hover {
+  background: linear-gradient(135deg, var(--coffee-primary-light) 0%, var(--coffee-primary) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(111, 78, 55, 0.3);
+}
+
+.btn-coffee-success {
+  background: linear-gradient(135deg, var(--coffee-success) 0%, var(--coffee-success-light) 100%);
+  color: white;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.btn-coffee-success:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 124, 89, 0.3);
+}
+
+.btn-coffee-caramel {
+  background: linear-gradient(135deg, var(--coffee-caramel) 0%, var(--coffee-accent) 100%);
+  color: var(--coffee-darker);
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-coffee-caramel:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(212, 165, 116, 0.4);
+}
+
+/* Card Styling for Coffee Theme */
+.card-coffee {
+  background: white;
+  border-radius: 1rem;
+  border: 1px solid var(--coffee-latte);
+  box-shadow: 0 2px 8px rgba(60, 42, 33, 0.06);
+  transition: all 0.3s ease;
+}
+
+.card-coffee:hover {
+  box-shadow: 0 8px 24px rgba(60, 42, 33, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Category Tab Pill Style */
+.category-pill {
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1.5px solid var(--coffee-latte);
+  background: white;
+  color: var(--coffee-dark);
+}
+
+.category-pill:hover {
+  border-color: var(--coffee-primary);
+  background: var(--coffee-cream);
+}
+
+.category-pill.active {
+  background: var(--coffee-primary);
+  color: white;
+  border-color: var(--coffee-primary);
+}
+
+/* Scrollbar Styling for Cart */
+.scrollbar-coffee::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-coffee::-webkit-scrollbar-track {
+  background: var(--coffee-cream);
+  border-radius: 3px;
+}
+
+.scrollbar-coffee::-webkit-scrollbar-thumb {
+  background: var(--coffee-latte);
+  border-radius: 3px;
+}
+
+.scrollbar-coffee::-webkit-scrollbar-thumb:hover {
+  background: var(--coffee-primary);
+}

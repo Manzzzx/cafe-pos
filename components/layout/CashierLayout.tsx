@@ -32,7 +32,7 @@ interface CashierLayoutProps {
 
 const menuItems = [
   { href: "/pos", label: "Kasir", icon: ShoppingCart },
-  { href: "/cashier/orders", label: "Riwayat Pesanan", icon: ClipboardList },
+  { href: "/pos/orders", label: "Riwayat Pesanan", icon: ClipboardList },
 ]
 
 export function CashierLayout({ children, user }: CashierLayoutProps) {
@@ -43,15 +43,15 @@ export function CashierLayout({ children, user }: CashierLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-stone-100">
+    <div className="min-h-screen bg-coffee-bg">
       {/* Top Navigation */}
-      <header className="h-14 bg-gradient-to-r from-amber-600 to-orange-600 text-white flex items-center justify-between px-4 lg:px-6 shadow-lg shadow-amber-500/20">
+      <header className="h-14 bg-coffee-gradient text-white flex items-center justify-between px-4 lg:px-6 shadow-lg" style={{ boxShadow: '0 4px 20px rgba(60, 42, 33, 0.25)' }}>
         <div className="flex items-center gap-6">
           <Link href="/pos" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
               <Coffee className="h-5 w-5 text-white" />
             </div>
-            <span className="font-bold text-lg hidden sm:inline">Coffee POS</span>
+            <span className="font-bold text-lg hidden sm:inline tracking-tight">Coffee POS</span>
           </Link>
 
           <nav className="flex items-center gap-1">
@@ -65,7 +65,7 @@ export function CashierLayout({ children, user }: CashierLayoutProps) {
                     variant="ghost"
                     size="sm"
                     className={cn(
-                      "text-white/80 hover:text-white hover:bg-white/20",
+                      "text-white/80 hover:text-white hover:bg-white/15 rounded-full px-4 transition-all",
                       isActive && "bg-white/20 text-white font-medium"
                     )}
                   >
@@ -80,22 +80,22 @@ export function CashierLayout({ children, user }: CashierLayoutProps) {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="gap-2 text-white hover:bg-white/20">
+            <Button variant="ghost" className="gap-2 text-white hover:bg-white/15 rounded-full px-3">
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-white/20 text-white font-bold">
+                <AvatarFallback className="bg-[#D4A574] text-[#3C2A21] font-bold text-sm">
                   {user.name?.charAt(0) || "U"}
                 </AvatarFallback>
               </Avatar>
-              <span className="hidden sm:inline">{user.name}</span>
-              <ChevronDown className="h-4 w-4" />
+              <span className="hidden sm:inline font-medium">{user.name}</span>
+              <ChevronDown className="h-4 w-4 opacity-70" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem disabled>
-              <span className="text-sm text-gray-500">{user.email}</span>
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuItem disabled className="text-xs">
+              <span className="text-gray-500">{user.email}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+            <DropdownMenuItem onClick={handleLogout} className="text-red-600 cursor-pointer">
               <LogOut className="h-4 w-4 mr-2" />
               Logout
             </DropdownMenuItem>
@@ -110,3 +110,4 @@ export function CashierLayout({ children, user }: CashierLayoutProps) {
     </div>
   )
 }
+

@@ -38,7 +38,7 @@ export default function POSPage() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-stone-100">
+    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: 'var(--coffee-bg)' }}>
       {/* Product Grid - Scrollable */}
       <ProductGrid onAddToCart={handleAddToCart} />
 
@@ -47,3 +47,4 @@ export default function POSPage() {
     </div>
   )
 }
+

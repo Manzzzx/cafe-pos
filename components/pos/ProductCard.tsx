@@ -64,12 +64,26 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
   return (
     <>
       <Card
-        className="cursor-pointer group bg-white border-0 shadow-lg shadow-stone-200/50 hover:shadow-xl hover:shadow-amber-200/30 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+        className="cursor-pointer group bg-white border overflow-hidden transition-all duration-300 hover:-translate-y-1"
+        style={{ 
+          borderColor: 'var(--coffee-latte)',
+          borderRadius: '1rem',
+          boxShadow: '0 2px 8px rgba(60, 42, 33, 0.06)'
+        }}
         onClick={handleClick}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = '0 8px 24px rgba(60, 42, 33, 0.12)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = '0 2px 8px rgba(60, 42, 33, 0.06)'
+        }}
       >
         <CardContent className="p-0">
           {/* Product Image */}
-          <div className="aspect-square bg-linear-to-br from-amber-50 to-orange-50 relative overflow-hidden">
+          <div 
+            className="aspect-square relative overflow-hidden"
+            style={{ backgroundColor: 'var(--coffee-cream)' }}
+          >
             {product.imageUrl ? (
               <img
                 src={product.imageUrl}
@@ -78,15 +92,19 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
-                <Coffee className="h-16 w-16 text-amber-300" />
+                <Coffee className="h-16 w-16" style={{ color: 'var(--coffee-latte)' }} />
               </div>
             )}
             
             {/* Quick add button overlay */}
-            <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
               <Button
                 size="sm"
-                className="bg-white/90 text-stone-800 hover:bg-white shadow-lg"
+                className="rounded-full px-4 font-semibold shadow-lg"
+                style={{
+                  background: 'linear-gradient(135deg, var(--coffee-success) 0%, var(--coffee-success-light) 100%)',
+                  color: 'white'
+                }}
                 onClick={(e) => {
                   e.stopPropagation()
                   handleClick()
@@ -101,7 +119,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
             {hasVariants && (
               <div className="absolute top-2 right-2 flex gap-1">
                 {product.variants?.temperatures?.includes("Iced") && (
-                  <Badge className="bg-blue-500/90 text-white text-xs border-0">
+                  <Badge className="bg-blue-500/90 text-white text-xs border-0 rounded-full">
                     <Snowflake className="h-3 w-3 mr-1" />
                     Ice
                   </Badge>
@@ -112,11 +130,26 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
           {/* Product Info */}
           <div className="p-4">
-            <Badge variant="secondary" className="text-xs mb-2 bg-stone-100 text-stone-600">
+            <Badge 
+              variant="secondary" 
+              className="text-xs mb-2 rounded-full"
+              style={{ 
+                backgroundColor: 'var(--coffee-cream)', 
+                color: 'var(--coffee-dark)' 
+              }}
+            >
               {product.category.name}
             </Badge>
-            <h3 className="font-semibold text-stone-800 truncate">{product.name}</h3>
-            <p className="text-amber-600 font-bold mt-1">
+            <h3 
+              className="font-semibold truncate"
+              style={{ color: 'var(--coffee-dark)' }}
+            >
+              {product.name}
+            </h3>
+            <p 
+              className="font-bold mt-1 text-lg"
+              style={{ color: 'var(--coffee-caramel)' }}
+            >
               {formatCurrency(product.price)}
             </p>
           </div>
@@ -125,19 +158,22 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
       {/* Variant Selection Modal */}
       <Dialog open={showVariantModal} onOpenChange={setShowVariantModal}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-sm rounded-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-amber-100 to-orange-100 flex items-center justify-center overflow-hidden">
+              <div 
+                className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden"
+                style={{ backgroundColor: 'var(--coffee-cream)' }}
+              >
                 {product.imageUrl ? (
                   <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
                 ) : (
-                  <Coffee className="h-6 w-6 text-amber-600" />
+                  <Coffee className="h-7 w-7" style={{ color: 'var(--coffee-primary)' }} />
                 )}
               </div>
               <div>
-                <p className="font-semibold">{product.name}</p>
-                <p className="text-sm text-amber-600 font-bold">{formatCurrency(product.price)}</p>
+                <p className="font-semibold" style={{ color: 'var(--coffee-dark)' }}>{product.name}</p>
+                <p className="text-sm font-bold" style={{ color: 'var(--coffee-caramel)' }}>{formatCurrency(product.price)}</p>
               </div>
             </DialogTitle>
           </DialogHeader>
@@ -146,14 +182,15 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
             {/* Size Selection */}
             {product.variants?.sizes && product.variants.sizes.length > 0 && (
               <div className="space-y-3">
-                <Label className="text-sm font-medium text-stone-700">Ukuran</Label>
+                <Label className="text-sm font-medium" style={{ color: 'var(--coffee-dark)' }}>Ukuran</Label>
                 <RadioGroup value={selectedSize} onValueChange={setSelectedSize} className="flex gap-2">
                   {product.variants.sizes.map((size) => (
                     <div key={size} className="flex-1">
                       <RadioGroupItem value={size} id={`size-${size}`} className="peer sr-only" />
                       <Label
                         htmlFor={`size-${size}`}
-                        className="flex items-center justify-center p-3 border-2 rounded-xl cursor-pointer transition-all peer-data-[state=checked]:border-amber-500 peer-data-[state=checked]:bg-amber-50 peer-data-[state=checked]:text-amber-700 hover:bg-stone-50"
+                        className="flex items-center justify-center p-3 border-2 rounded-full cursor-pointer transition-all peer-data-[state=checked]:border-[#6F4E37] peer-data-[state=checked]:bg-[#F5F0E1] peer-data-[state=checked]:text-[#6F4E37] hover:bg-[#F5F0E1]"
+                        style={{ borderColor: 'var(--coffee-latte)' }}
                       >
                         {size}
                       </Label>
@@ -166,14 +203,15 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
             {/* Temperature Selection */}
             {product.variants?.temperatures && product.variants.temperatures.length > 0 && (
               <div className="space-y-3">
-                <Label className="text-sm font-medium text-stone-700">Suhu</Label>
+                <Label className="text-sm font-medium" style={{ color: 'var(--coffee-dark)' }}>Suhu</Label>
                 <RadioGroup value={selectedTemp} onValueChange={setSelectedTemp} className="flex gap-2">
                   {product.variants.temperatures.map((temp) => (
                     <div key={temp} className="flex-1">
                       <RadioGroupItem value={temp} id={`temp-${temp}`} className="peer sr-only" />
                       <Label
                         htmlFor={`temp-${temp}`}
-                        className="flex items-center justify-center gap-2 p-3 border-2 rounded-xl cursor-pointer transition-all peer-data-[state=checked]:border-amber-500 peer-data-[state=checked]:bg-amber-50 peer-data-[state=checked]:text-amber-700 hover:bg-stone-50"
+                        className="flex items-center justify-center gap-2 p-3 border-2 rounded-full cursor-pointer transition-all peer-data-[state=checked]:border-[#6F4E37] peer-data-[state=checked]:bg-[#F5F0E1] peer-data-[state=checked]:text-[#6F4E37] hover:bg-[#F5F0E1]"
+                        style={{ borderColor: 'var(--coffee-latte)' }}
                       >
                         {temp === "Iced" ? (
                           <Snowflake className="h-4 w-4 text-blue-500" />
@@ -190,7 +228,11 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
             <Button 
               onClick={handleAddWithVariant}
-              className="w-full h-12 bg-linear-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold"
+              className="w-full h-12 rounded-full font-semibold"
+              style={{
+                background: 'linear-gradient(135deg, var(--coffee-success) 0%, var(--coffee-success-light) 100%)',
+                color: 'white'
+              }}
             >
               <Plus className="h-5 w-5 mr-2" />
               Tambah ke Keranjang
@@ -201,3 +243,4 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
     </>
   )
 }
+

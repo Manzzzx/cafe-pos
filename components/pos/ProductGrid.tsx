@@ -4,8 +4,7 @@ import { useState, useEffect } from "react"
 import { ProductCard } from "./ProductCard"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Search, Coffee, Loader2, Leaf, Cake } from "lucide-react"
+import { Search, Coffee, Loader2, Leaf, Cake, Filter } from "lucide-react"
 
 interface Product {
   id: string
@@ -35,13 +34,6 @@ const categoryIcons: Record<string, React.ElementType> = {
   TEA: Leaf,
   SNACK: Cake,
   DESSERT: Cake,
-}
-
-const categoryColors: Record<string, string> = {
-  COFFEE: "from-amber-500 to-orange-600",
-  TEA: "from-emerald-500 to-teal-600",
-  SNACK: "from-pink-500 to-rose-600",
-  DESSERT: "from-purple-500 to-violet-600",
 }
 
 export function ProductGrid({ onAddToCart }: ProductGridProps) {
@@ -81,72 +73,76 @@ export function ProductGrid({ onAddToCart }: ProductGridProps) {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center bg-coffee-bg">
         <div className="text-center space-y-3">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto text-amber-600" />
-          <p className="text-stone-500">Memuat produk...</p>
+          <div className="w-16 h-16 mx-auto rounded-full bg-coffee-cream flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-coffee-primary" style={{ color: 'var(--coffee-primary)' }} />
+          </div>
+          <p className="text-coffee-dark" style={{ color: 'var(--coffee-dark)' }}>Memuat menu...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-linear-to-br from-stone-50 to-amber-50/30 overflow-hidden">
+    <div className="flex-1 flex flex-col bg-coffee-bg overflow-hidden" style={{ backgroundColor: 'var(--coffee-bg)' }}>
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-md border-b border-stone-200/50 p-4 space-y-4">
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400" />
-          <Input
-            placeholder="Cari produk..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-12 h-12 bg-white border-stone-200 rounded-xl text-base"
-          />
+      <div className="bg-white border-b p-4 space-y-4" style={{ borderColor: 'var(--coffee-latte)' }}>
+        {/* Search with Filter Button */}
+        <div className="flex gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5" style={{ color: 'var(--coffee-latte)' }} />
+            <Input
+              placeholder="Cari menu kopi..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-12 h-12 bg-white rounded-full text-base border-2 focus:border-[#6F4E37] transition-colors"
+              style={{ borderColor: 'var(--coffee-latte)' }}
+            />
+          </div>
+          <Button 
+            className="h-12 px-6 rounded-full font-semibold"
+            style={{ 
+              background: 'linear-gradient(135deg, var(--coffee-success) 0%, var(--coffee-success-light) 100%)',
+              color: 'white'
+            }}
+          >
+            <Filter className="h-4 w-4 mr-2" />
+            Filter
+          </Button>
         </div>
 
-        {/* Category Tabs */}
+        {/* Category Tabs - Pill Style */}
         <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-          <Button
-            variant={activeCategory === null ? "default" : "outline"}
-            size="sm"
+          <button
             onClick={() => setActiveCategory(null)}
-            className={activeCategory === null 
-              ? "bg-linear-to-r from-amber-500 to-orange-600 text-white border-0 shadow-lg shadow-amber-500/25" 
-              : "bg-white border-stone-200 hover:bg-stone-50"
-            }
+            className={`category-pill flex items-center gap-2 whitespace-nowrap ${activeCategory === null ? 'active' : ''}`}
           >
-            <Coffee className="h-4 w-4 mr-2" />
-            Semua
-          </Button>
+            <Coffee className="h-4 w-4" />
+            All
+          </button>
           {categories.map((category) => {
             const Icon = categoryIcons[category.type || "COFFEE"] || Coffee
             const isActive = activeCategory === category.id
-            const colorClass = categoryColors[category.type || "COFFEE"] || categoryColors.COFFEE
             
             return (
-              <Button
+              <button
                 key={category.id}
-                variant={isActive ? "default" : "outline"}
-                size="sm"
                 onClick={() => setActiveCategory(category.id)}
-                className={isActive 
-                  ? `bg-linear-to-r ${colorClass} text-white border-0 shadow-lg` 
-                  : "bg-white border-stone-200 hover:bg-stone-50"
-                }
+                className={`category-pill flex items-center gap-2 whitespace-nowrap ${isActive ? 'active' : ''}`}
               >
-                <Icon className="h-4 w-4 mr-2" />
+                <Icon className="h-4 w-4" />
                 {category.name}
-              </Button>
+              </button>
             )
           })}
         </div>
       </div>
 
       {/* Products Grid */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4 scrollbar-coffee">
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
@@ -158,16 +154,21 @@ export function ProductGrid({ onAddToCart }: ProductGridProps) {
         ) : (
           <div className="h-full flex items-center justify-center">
             <div className="text-center">
-              <Coffee className="h-16 w-16 mx-auto mb-4 text-stone-300" />
-              <p className="text-stone-500">Tidak ada produk ditemukan</p>
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--coffee-cream)' }}>
+                <Coffee className="h-10 w-10" style={{ color: 'var(--coffee-latte)' }} />
+              </div>
+              <p style={{ color: 'var(--coffee-dark)' }}>Tidak ada menu ditemukan</p>
               {search && (
-                <Button
-                  variant="link"
+                <button
                   onClick={() => setSearch("")}
-                  className="mt-2 text-amber-600"
+                  className="mt-3 px-4 py-2 rounded-full text-sm font-medium transition-colors"
+                  style={{ 
+                    color: 'var(--coffee-primary)',
+                    backgroundColor: 'var(--coffee-cream)'
+                  }}
                 >
                   Reset pencarian
-                </Button>
+                </button>
               )}
             </div>
           </div>
@@ -176,3 +177,4 @@ export function ProductGrid({ onAddToCart }: ProductGridProps) {
     </div>
   )
 }
+

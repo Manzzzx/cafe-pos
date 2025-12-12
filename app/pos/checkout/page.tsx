@@ -32,6 +32,15 @@ export default function CheckoutPage() {
   const [isSuccess, setIsSuccess] = useState(false)
   const [orderNumber, setOrderNumber] = useState("")
 
+  // Load customer name from session storage (set in CartSidebar)
+  useEffect(() => {
+    const savedName = sessionStorage.getItem('posCustomerName')
+    if (savedName) {
+      setCustomerName(savedName)
+      sessionStorage.removeItem('posCustomerName')
+    }
+  }, [])
+
   const grandTotal = getGrandTotal()
   const change = paymentMethod === "CASH" ? Number(cashAmount) - grandTotal : 0
 
@@ -102,30 +111,41 @@ export default function CheckoutPage() {
   // Success state
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 to-amber-50/30 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md text-center border-0 shadow-2xl shadow-amber-500/10">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, var(--coffee-bg) 0%, var(--coffee-cream) 100%)' }}>
+        <Card className="w-full max-w-md text-center border-0 shadow-2xl" style={{ boxShadow: '0 25px 50px -12px rgba(60, 42, 33, 0.15)' }}>
           <CardContent className="pt-10 pb-8 px-8">
-            <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-emerald-500/30 animate-bounce">
+            <div 
+              className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg animate-bounce"
+              style={{ 
+                background: 'linear-gradient(135deg, var(--coffee-success) 0%, var(--coffee-success-light) 100%)',
+                boxShadow: '0 10px 25px rgba(74, 124, 89, 0.3)'
+              }}
+            >
               <Check className="h-10 w-10 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-emerald-600 mb-2">Pembayaran Berhasil!</h2>
-            <p className="text-stone-500 mb-6">Pesanan sedang diproses</p>
+            <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--coffee-success)' }}>Pembayaran Berhasil!</h2>
+            <p className="mb-6" style={{ color: 'var(--coffee-primary)' }}>Pesanan sedang diproses</p>
             
-            <div className="bg-stone-50 rounded-2xl p-6 mb-6">
-              <p className="text-sm text-stone-500 mb-1">Nomor Pesanan</p>
-              <p className="text-3xl font-mono font-bold text-amber-600">{orderNumber}</p>
+            <div className="rounded-2xl p-6 mb-6" style={{ backgroundColor: 'var(--coffee-cream)' }}>
+              <p className="text-sm mb-1" style={{ color: 'var(--coffee-primary)' }}>Nomor Pesanan</p>
+              <p className="text-3xl font-mono font-bold" style={{ color: 'var(--coffee-caramel)' }}>{orderNumber}</p>
             </div>
             
             {paymentMethod === "CASH" && change > 0 && (
-              <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6">
-                <p className="text-sm text-stone-600">Kembalian</p>
-                <p className="text-2xl font-bold text-amber-600">{formatCurrency(change)}</p>
+              <div className="rounded-2xl p-4 mb-6" style={{ backgroundColor: 'var(--coffee-cream)', border: '1px solid var(--coffee-latte)' }}>
+                <p className="text-sm" style={{ color: 'var(--coffee-dark)' }}>Kembalian</p>
+                <p className="text-2xl font-bold" style={{ color: 'var(--coffee-success)' }}>{formatCurrency(change)}</p>
               </div>
             )}
 
             <Button 
               onClick={() => router.push("/pos")} 
-              className="w-full h-12 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold shadow-lg shadow-amber-500/25"
+              className="w-full h-12 rounded-full font-semibold shadow-lg"
+              style={{
+                background: 'linear-gradient(135deg, var(--coffee-caramel) 0%, var(--coffee-accent) 100%)',
+                color: 'var(--coffee-darker)',
+                boxShadow: '0 4px 12px rgba(212, 165, 116, 0.4)'
+              }}
             >
               <Receipt className="h-5 w-5 mr-2" />
               Pesanan Baru
@@ -139,12 +159,19 @@ export default function CheckoutPage() {
   // Empty cart redirect
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-stone-50 to-amber-50/30 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md text-center border-0 shadow-xl">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, var(--coffee-bg) 0%, var(--coffee-cream) 100%)' }}>
+        <Card className="w-full max-w-md text-center border-0 shadow-xl rounded-2xl">
           <CardContent className="pt-10 pb-8">
-            <Coffee className="h-16 w-16 mx-auto mb-4 text-stone-300" />
-            <p className="text-stone-500 mb-4">Keranjang kosong</p>
-            <Button onClick={() => router.push("/pos")} variant="outline">
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--coffee-cream)' }}>
+              <Coffee className="h-10 w-10" style={{ color: 'var(--coffee-latte)' }} />
+            </div>
+            <p className="mb-4" style={{ color: 'var(--coffee-dark)' }}>Keranjang kosong</p>
+            <Button 
+              onClick={() => router.push("/pos")} 
+              variant="outline"
+              className="rounded-full"
+              style={{ borderColor: 'var(--coffee-latte)', color: 'var(--coffee-dark)' }}
+            >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Kembali ke POS
             </Button>
@@ -155,7 +182,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 to-amber-50/30 p-4 md:p-6">
+    <div className="min-h-screen p-4 md:p-6" style={{ background: 'linear-gradient(135deg, var(--coffee-bg) 0%, var(--coffee-cream) 100%)' }}>
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
@@ -163,13 +190,14 @@ export default function CheckoutPage() {
             variant="outline" 
             size="icon" 
             onClick={() => router.push("/pos")}
-            className="rounded-xl border-stone-200"
+            className="rounded-full"
+            style={{ borderColor: 'var(--coffee-latte)' }}
           >
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeft className="h-5 w-5" style={{ color: 'var(--coffee-dark)' }} />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-stone-800">Checkout</h1>
-            <p className="text-sm text-stone-500">{items.length} item • Tekan Enter untuk bayar</p>
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--coffee-dark)' }}>Checkout</h1>
+            <p className="text-sm" style={{ color: 'var(--coffee-primary)' }}>{items.length} item • Tekan Enter untuk bayar</p>
           </div>
         </div>
 
