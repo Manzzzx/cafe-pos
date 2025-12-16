@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { signOut } from "next-auth/react"
+import { useLogoutSync } from "@/components/auth/logout-sync"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -37,10 +37,7 @@ const menuItems = [
 
 export function CashierLayout({ children, user }: CashierLayoutProps) {
   const pathname = usePathname()
-
-  const handleLogout = () => {
-    signOut({ callbackUrl: "/auth/login" })
-  }
+  const { handleLogout } = useLogoutSync()
 
   return (
     <div className="min-h-screen bg-coffee-bg">
@@ -51,7 +48,7 @@ export function CashierLayout({ children, user }: CashierLayoutProps) {
             <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
               <Coffee className="h-5 w-5 text-white" />
             </div>
-            <span className="font-bold text-lg hidden sm:inline tracking-tight">Coffee POS</span>
+            <span className="font-bold text-lg hidden sm:inline tracking-tight">Kafe POS</span>
           </Link>
 
           <nav className="flex items-center gap-1">

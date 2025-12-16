@@ -34,7 +34,7 @@ const menuItems = {
     { href: "/pos", label: "Kasir (POS)", icon: ShoppingCart },
     { href: "/admin/orders", label: "Riwayat", icon: ClipboardList },
   ],
-  KITCHEN: [
+  CHEF: [
     { href: "/dashboard/kitchen", label: "Dashboard", icon: LayoutDashboard },
     { href: "/kitchen", label: "Kitchen Display", icon: ChefHat },
   ],

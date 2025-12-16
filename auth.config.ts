@@ -5,8 +5,7 @@ import { NextResponse } from "next/server"
 const rolePermissions: Record<string, string[]> = {
   ADMIN: ["/admin", "/api"],
   CASHIER: ["/pos", "/api/products", "/api/categories", "/api/orders"],
-  BARISTA: ["/dashboard/barista", "/dashboard/kitchen", "/kitchen", "/api/orders"],
-  KITCHEN: ["/dashboard/kitchen", "/kitchen", "/api/orders"],
+  CHEF: ["/dashboard/kitchen", "/kitchen", "/api/orders"],
 }
 
 function getDashboardByRole(role: string | undefined): string {
@@ -15,8 +14,7 @@ function getDashboardByRole(role: string | undefined): string {
       return "/admin/dashboard"
     case "CASHIER":
       return "/pos"
-    case "BARISTA":
-    case "KITCHEN":
+    case "CHEF":
       return "/kitchen"
     default:
       return "/auth/login"
@@ -24,7 +22,10 @@ function getDashboardByRole(role: string | undefined): string {
 }
 
 export const authConfig: NextAuthConfig = {
-  session: { strategy: "jwt" },
+  session: { 
+    strategy: "jwt",
+    maxAge: 8 * 60 * 60,
+  },
   pages: {
     signIn: "/auth/login",
   },
@@ -85,7 +86,7 @@ export const authConfig: NextAuthConfig = {
     },
     session({ session, token }) {
       if (session.user) {
-        session.user.role = token.role as "ADMIN" | "CASHIER" | "BARISTA" | "KITCHEN"
+        session.user.role = token.role as "ADMIN" | "CASHIER" | "CHEF"
         session.user.id = token.id as string
       }
       return session

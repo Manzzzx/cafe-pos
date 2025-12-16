@@ -1,11 +1,14 @@
 "use client"
 
 import { SessionProvider } from "next-auth/react"
+import { LogoutSyncProvider } from "@/components/auth/logout-sync"
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
-      {children}
+      <LogoutSyncProvider>
+        {children}
+      </LogoutSyncProvider>
     </SessionProvider>
   )
 }

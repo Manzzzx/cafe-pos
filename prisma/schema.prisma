@@ -85,7 +85,7 @@ model OrderItem {
 enum Role {
   ADMIN
   CASHIER
-  BARISTA
+  CHEF
 }
 
 enum CategoryType {

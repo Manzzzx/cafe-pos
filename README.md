@@ -14,7 +14,7 @@ Sistem Point of Sale (POS) modern dan lengkap untuk kafe, dibangun dengan Next.j
 ### 🔐 Role-Based Access Control
 - **Admin** - Full access to dashboard, products, categories, orders, reports
 - **Cashier** - POS interface and order history
-- **Kitchen** - Kitchen display for order preparation
+- **Chef** - Kitchen display for order preparation
 
 ### 💳 Point of Sale (POS)
 - Product catalog with category filtering
@@ -153,7 +153,7 @@ After seeding, you can login with:
 |------|-------|----------|
 | Admin | admin@coffee.com | admin123 |
 | Cashier | cashier@coffee.com | cashier123 |
-| Kitchen | kitchen@kafe.com | kitchen123 |
+| Chef | chef@kafe.com | password123 |
 
 ---
 

@@ -16,10 +16,10 @@ async function main() {
   const hashedPassword = await bcrypt.hash("password123", 10)
 
   await prisma.user.upsert({
-    where: { email: "admin@coffee.com" },
+    where: { email: "admin@kafe.com" },
     update: {},
     create: {
-      email: "admin@coffee.com",
+      email: "admin@kafe.com",
       name: "Admin",
       password: hashedPassword,
       role: Role.ADMIN,
@@ -27,10 +27,10 @@ async function main() {
   })
 
   await prisma.user.upsert({
-    where: { email: "kasir@coffee.com" },
+    where: { email: "kasir@kafe.com" },
     update: {},
     create: {
-      email: "kasir@coffee.com",
+      email: "kasir@kafe.com",
       name: "Kasir",
       password: hashedPassword,
       role: Role.CASHIER,
@@ -38,13 +38,13 @@ async function main() {
   })
 
   await prisma.user.upsert({
-    where: { email: "barista@coffee.com" },
+    where: { email: "chef@kafe.com" },
     update: {},
     create: {
-      email: "barista@coffee.com",
-      name: "Barista",
+      email: "chef@kafe.com",
+      name: "Chef",
       password: hashedPassword,
-      role: Role.BARISTA,
+      role: Role.CHEF,
     },
   })
 

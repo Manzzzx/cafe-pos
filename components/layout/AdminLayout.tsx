@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { signOut } from "next-auth/react"
+import { useLogoutSync } from "@/components/auth/logout-sync"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -48,14 +48,11 @@ export function AdminLayout({ children, user }: AdminLayoutProps) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const { handleLogout } = useLogoutSync()
 
   useEffect(() => {
     setMounted(true)
   }, [])
-
-  const handleLogout = () => {
-    signOut({ callbackUrl: "/auth/login" })
-  }
 
   return (
     <div className="min-h-screen bg-linear-to-br from-stone-100 to-amber-50/30 flex">
@@ -83,7 +80,7 @@ export function AdminLayout({ children, user }: AdminLayoutProps) {
                 <Coffee className="w-5 h-5 text-white" />
               </div>
               <div>
-                <span className="font-bold text-lg tracking-tight">Coffee POS</span>
+                <span className="font-bold text-lg tracking-tight">Kafe POS</span>
                 <p className="text-[10px] text-amber-300/60 -mt-1">Admin Panel</p>
               </div>
             </Link>
@@ -180,7 +177,7 @@ export function AdminLayout({ children, user }: AdminLayoutProps) {
               <div className="w-8 h-8 rounded-lg bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center">
                 <Coffee className="w-4 h-4 text-white" />
               </div>
-              <span className="font-bold text-stone-800">Coffee POS</span>
+              <span className="font-bold text-stone-800">Kafe POS</span>
             </div>
           </div>
 

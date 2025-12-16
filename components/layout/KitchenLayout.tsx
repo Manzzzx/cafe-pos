@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { signOut } from "next-auth/react"
+import { useLogoutSync } from "@/components/auth/logout-sync"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
@@ -23,9 +23,7 @@ interface KitchenLayoutProps {
 }
 
 export function KitchenLayout({ children, user }: KitchenLayoutProps) {
-  const handleLogout = () => {
-    signOut({ callbackUrl: "/auth/login" })
-  }
+  const { handleLogout } = useLogoutSync()
 
   return (
     <div className="min-h-screen bg-gray-900">
