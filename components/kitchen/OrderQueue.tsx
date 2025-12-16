@@ -4,9 +4,18 @@ import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { pusherClient } from "@/lib/pusher-client"
+import { useLogoutSync } from "@/components/auth/logout-sync"
+import { useSession } from "next-auth/react"
 import { differenceInMinutes, differenceInSeconds } from "date-fns"
-import { Clock, Check, ChefHat, RefreshCw, Coffee, Timer, AlertCircle } from "lucide-react"
+import { Clock, Check, ChefHat, RefreshCw, Coffee, Timer, AlertCircle, LogOut } from "lucide-react"
 
 interface OrderItem {
   id: string
@@ -47,6 +56,34 @@ function getUrgencyColor(minutes: number): { bg: string; border: string; pulse: 
     return { bg: "bg-amber-50", border: "border-amber-400", pulse: false }
   }
   return { bg: "bg-white", border: "border-stone-200", pulse: false }
+}
+
+function LogoutButton() {
+  const { data: session } = useSession()
+  const { handleLogout } = useLogoutSync()
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="text-white hover:bg-white/20">
+          <Avatar className="h-8 w-8">
+            <AvatarFallback className="bg-white/20 text-white text-sm">
+              {session?.user?.name?.charAt(0) || "C"}
+            </AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem disabled className="text-xs">
+          <span className="text-gray-500">{session?.user?.name || "Chef"}</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout} className="text-red-600 cursor-pointer">
+          <LogOut className="h-4 w-4 mr-2" />
+          Logout
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
 }
 
 export function OrderQueue() {
@@ -151,6 +188,7 @@ export function OrderQueue() {
             <RefreshCw className="h-5 w-5 mr-2" />
             Refresh
           </Button>
+          <LogoutButton />
         </div>
       </div>
 

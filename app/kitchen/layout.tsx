@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 
-export default async function KitchenLayout({
+export default async function KitchenLayoutPage({
   children,
 }: {
   children: React.ReactNode
@@ -11,5 +11,6 @@ export default async function KitchenLayout({
   if (!session?.user) {
     redirect("/auth/login")
   }
+
   return <>{children}</>
 }
