@@ -272,7 +272,7 @@ export default function ProductsPage() {
           <h1 className="text-2xl md:text-3xl font-bold text-stone-800 flex items-center gap-3">
             Manajemen Produk
           </h1>
-          <p className="text-stone-500 mt-1">Kelola produk coffee shop</p>
+          <p className="text-stone-500 mt-1">Kelola produk kafe</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">

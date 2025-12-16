@@ -1,6 +1,6 @@
-# ☕ Coffee Shop POS
+# ☕ Kafe POS
 
-A modern, full-featured Point of Sale (POS) system for coffee shops built with Next.js 16, featuring role-based access control, real-time kitchen display, and beautiful coffee-themed UI.
+Sistem Point of Sale (POS) modern dan lengkap untuk kafe, dibangun dengan Next.js 16, dilengkapi role-based access control, real-time kitchen display, dan UI bertema kopi yang menarik.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.0-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)
@@ -14,7 +14,7 @@ A modern, full-featured Point of Sale (POS) system for coffee shops built with N
 ### 🔐 Role-Based Access Control
 - **Admin** - Full access to dashboard, products, categories, orders, reports
 - **Cashier** - POS interface and order history
-- **Barista** - Kitchen display for order preparation
+- **Kitchen** - Kitchen display for order preparation
 
 ### 💳 Point of Sale (POS)
 - Product catalog with category filtering
@@ -66,7 +66,7 @@ A modern, full-featured Point of Sale (POS) system for coffee shops built with N
 ## 📁 Project Structure
 
 ```
-coffee-shop-pos/
+kafe-pos/
 ├── app/
 │   ├── admin/           # Admin pages (dashboard, products, etc.)
 │   ├── api/             # API routes
@@ -153,7 +153,7 @@ After seeding, you can login with:
 |------|-------|----------|
 | Admin | admin@coffee.com | admin123 |
 | Cashier | cashier@coffee.com | cashier123 |
-| Barista | barista@coffee.com | barista123 |
+| Kitchen | kitchen@kafe.com | kitchen123 |
 
 ---
 
@@ -228,4 +228,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ☕ and ❤️
+Made with ☕ and ❤️ by Kafe POS Team

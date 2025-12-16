@@ -78,7 +78,7 @@ export default function LoginPage() {
           {/* Logo & Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">
-              Coffee Shop POS
+              Kafe POS
             </h1>
             <p className="text-amber-200/70 text-sm">
               Selamat datang kembali! Silakan masuk.
@@ -173,7 +173,7 @@ export default function LoginPage() {
           {/* Footer */}
           <div className="mt-8 pt-6 border-t border-white/10">
             <p className="text-center text-amber-200/40 text-xs">
-              © 2024 Coffee Shop POS System
+              © 2024 Kafe POS System
             </p>
           </div>
         </div>

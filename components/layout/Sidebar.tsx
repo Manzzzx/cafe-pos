@@ -34,8 +34,8 @@ const menuItems = {
     { href: "/pos", label: "Kasir (POS)", icon: ShoppingCart },
     { href: "/admin/orders", label: "Riwayat", icon: ClipboardList },
   ],
-  BARISTA: [
-    { href: "/dashboard/barista", label: "Dashboard", icon: LayoutDashboard },
+  KITCHEN: [
+    { href: "/dashboard/kitchen", label: "Dashboard", icon: LayoutDashboard },
     { href: "/kitchen", label: "Kitchen Display", icon: ChefHat },
   ],
 }
@@ -47,7 +47,7 @@ export function Sidebar({ role }: SidebarProps) {
   return (
     <aside className="w-64 bg-[#2C1A12] text-white min-h-screen p-4">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#D4A574]">Coffee POS</h1>
+        <h1 className="text-2xl font-bold text-[#D4A574]">Kafe POS</h1>
         <p className="text-sm text-gray-400">{role}</p>
       </div>
 

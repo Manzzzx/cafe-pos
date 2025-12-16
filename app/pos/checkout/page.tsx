@@ -410,7 +410,7 @@ export default function CheckoutPage() {
                 {/* QRIS Display */}
                 {paymentMethod === "QRIS" && (
                   <div className="mt-6 py-4">
-                    <QRISDisplay merchantName="Coffee Shop POS" amount={grandTotal} />
+                    <QRISDisplay merchantName="Kafe POS" amount={grandTotal} />
                   </div>
                 )}
 

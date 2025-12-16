@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ChefHat, LogOut, Home } from "lucide-react"
 
-interface BaristaLayoutProps {
+interface KitchenLayoutProps {
   children: React.ReactNode
   user: {
     name?: string | null
@@ -22,7 +22,7 @@ interface BaristaLayoutProps {
   }
 }
 
-export function BaristaLayout({ children, user }: BaristaLayoutProps) {
+export function KitchenLayout({ children, user }: KitchenLayoutProps) {
   const handleLogout = () => {
     signOut({ callbackUrl: "/auth/login" })
   }
@@ -32,14 +32,14 @@ export function BaristaLayout({ children, user }: BaristaLayoutProps) {
       {/* Minimal Top Bar */}
       <header className="h-14 bg-[#1a1a2e] text-white flex items-center justify-between px-4">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard/barista" className="flex items-center gap-2">
+          <Link href="/dashboard/kitchen" className="flex items-center gap-2">
             <ChefHat className="h-6 w-6" />
             <span className="font-bold">Kitchen Display</span>
           </Link>
         </div>
 
         <div className="flex items-center gap-2">
-          <Link href="/dashboard/barista">
+          <Link href="/dashboard/kitchen">
             <Button variant="ghost" size="sm" className="text-white/70 hover:text-white hover:bg-white/10">
               <Home className="h-4 w-4 mr-2" />
               Dashboard

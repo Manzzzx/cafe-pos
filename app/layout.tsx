@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Coffee Shop POS",
-  description: "Point of Sale System for Coffee Shop",
+  title: "Kafe POS",
+  description: "Sistem Point of Sale untuk Kafe",
 };
 
 export default function RootLayout({
