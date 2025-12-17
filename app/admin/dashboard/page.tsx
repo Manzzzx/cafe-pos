@@ -129,16 +129,6 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-6">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-stone-800">Dashboard</h1>
-          <p className="text-stone-500">Selamat datang kembali, {session.user.name || session.user.email}!</p>
-        </div>
-        <div className="text-sm text-stone-500">
-          {format(new Date(), "EEEE, dd MMMM yyyy", { locale: id })}
-        </div>
-      </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

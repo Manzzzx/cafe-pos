@@ -45,7 +45,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a0f0a] to-[#2b1a12]">
+    <main className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#1a0f0a] to-[#2b1a12]">
       <section className="w-full max-w-md px-6">
         <div className="bg-[#1f130d] border border-white/10 rounded-2xl p-8 shadow-xl">
           {/* Header */}

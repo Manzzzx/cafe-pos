@@ -276,3 +276,13 @@
 .scrollbar-coffee::-webkit-scrollbar-thumb:hover {
   background: var(--coffee-primary);
 }
+
+/* Hide Scrollbar (Cross-browser) */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
