@@ -28,7 +28,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Plus, Pencil, Trash2, FolderTree, Loader2, Coffee, Cake, Leaf } from "lucide-react"
+import { Plus, Pencil, Trash2, FolderTree, Loader2, Coffee, Cake, Leaf, Dessert, UtensilsCrossed, GlassWater, Wine, CupSoda, Croissant, Popcorn, Salad, Soup } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface Category {
   id: string
@@ -39,10 +49,16 @@ interface Category {
 }
 
 const categoryTypes = [
-  { value: "COFFEE", label: "Coffee", icon: Coffee, color: "from-amber-500 to-orange-600" },
-  { value: "TEA", label: "Tea", icon: Leaf, color: "from-emerald-500 to-teal-600" },
-  { value: "SNACK", label: "Snack", icon: Cake, color: "from-pink-500 to-rose-600" },
-  { value: "DESSERT", label: "Dessert", icon: Cake, color: "from-purple-500 to-violet-600" },
+  { value: "COFFEE", label: "Kopi", icon: Coffee, color: "from-amber-600 to-orange-600" },
+  { value: "TEA", label: "Teh", icon: Wine, color: "from-emerald-500 to-teal-600" },
+  { value: "NON_COFFEE", label: "Non-Kopi", icon: GlassWater, color: "from-pink-500 to-rose-500" },
+  { value: "JUICE", label: "Jus & Smoothie", icon: CupSoda, color: "from-orange-400 to-yellow-500" },
+  { value: "SNACK", label: "Snack", icon: Popcorn, color: "from-pink-500 to-rose-600" },
+  { value: "PASTRY", label: "Pastry & Bakery", icon: Croissant, color: "from-yellow-600 to-amber-600" },
+  { value: "DESSERT", label: "Dessert & Cake", icon: Dessert, color: "from-purple-500 to-violet-600" },
+  { value: "MAIN_COURSE", label: "Makanan Berat", icon: Soup, color: "from-red-500 to-orange-600" },
+  { value: "APPETIZER", label: "Pembuka", icon: Salad, color: "from-blue-500 to-cyan-600" },
+  { value: "OTHER", label: "Lainnya", icon: UtensilsCrossed, color: "from-stone-500 to-stone-600" },
 ]
 
 export default function CategoriesPage() {
@@ -51,6 +67,8 @@ export default function CategoriesPage() {
   const [saving, setSaving] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
 
   const [formData, setFormData] = useState({
     name: "",
@@ -107,15 +125,31 @@ export default function CategoriesPage() {
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Hapus kategori ini? Produk dalam kategori tidak akan terhapus.")) return
+  const handleDelete = async () => {
+    if (!categoryToDelete) return
 
     try {
-      const res = await fetch(`/api/categories/${id}`, { method: "DELETE" })
-      if (res.ok) fetchCategories()
+      const res = await fetch(`/api/categories/${categoryToDelete.id}`, { method: "DELETE" })
+      
+      if (res.ok) {
+        setCategoryToDelete(null)
+        fetchCategories()
+      } else {
+        const data = await res.json()
+        alert(data.error || "Gagal menghapus kategori")
+        console.error("Delete failed:", data.error)
+      }
     } catch (error) {
       console.error("Failed to delete category:", error)
+      alert("Gagal menghapus kategori")
+    } finally {
+      setDeleteDialogOpen(false)
     }
+  }
+
+  const openDeleteDialog = (category: Category) => {
+    setCategoryToDelete(category)
+    setDeleteDialogOpen(true)
   }
 
   const openEditDialog = (category: Category) => {
@@ -303,7 +337,7 @@ export default function CategoriesPage() {
                           <Button 
                             variant="ghost" 
                             size="icon" 
-                            onClick={() => handleDelete(category.id)}
+                            onClick={() => openDeleteDialog(category)}
                             className="h-8 w-8 hover:bg-red-50 hover:text-red-600"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -326,6 +360,33 @@ export default function CategoriesPage() {
           </div>
         </CardContent>
       </Card>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus Kategori?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Apakah Anda yakin ingin menghapus kategori <span className="font-semibold text-stone-900">{categoryToDelete?.name}</span>?{" "}
+              {categoryToDelete?._count?.products && categoryToDelete._count.products > 0 ? (
+                <span className="text-amber-600">
+                  Kategori ini memiliki {categoryToDelete._count.products} produk. Produk tidak akan terhapus.
+                </span>
+              ) : (
+                "Tindakan ini tidak dapat dibatalkan."
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <Button
+              onClick={handleDelete}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Hapus
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

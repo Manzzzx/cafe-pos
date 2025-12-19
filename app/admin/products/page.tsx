@@ -28,9 +28,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { formatCurrency } from "@/lib/utils"
-import { Plus, Pencil, Trash2, Package, Search, Coffee, Loader2, Upload, X, ImageIcon, Thermometer, Snowflake } from "lucide-react"
+import { formatCurrency, cn } from "@/lib/utils"
+import { Plus, Pencil, Trash2, Package, Search, Coffee, Loader2, Upload, X, ImageIcon, Thermometer, Snowflake, Eye, EyeOff } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface Category {
   id: string
@@ -61,6 +72,9 @@ export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null)
+  const [filterTab, setFilterTab] = useState<"all" | "active" | "inactive">("all")
 
   const [formData, setFormData] = useState({
     name: "",
@@ -197,15 +211,31 @@ export default function ProductsPage() {
     }
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Hapus produk ini?")) return
+  const handleDelete = async () => {
+    if (!productToDelete) return
 
     try {
-      const res = await fetch(`/api/products/${id}`, { method: "DELETE" })
-      if (res.ok) fetchData()
+      const res = await fetch(`/api/products/${productToDelete.id}`, { method: "DELETE" })
+      
+      if (res.ok) {
+        setProductToDelete(null)
+        fetchData()
+      } else {
+        const data = await res.json()
+        alert(data.error || "Gagal menghapus produk")
+        console.error("Delete failed:", data.error)
+      }
     } catch (error) {
       console.error("Failed to delete product:", error)
+      alert("Gagal menghapus produk")
+    } finally {
+      setDeleteDialogOpen(false)
     }
+  }
+
+  const openDeleteDialog = (product: Product) => {
+    setProductToDelete(product)
+    setDeleteDialogOpen(true)
   }
 
   const openEditDialog = (product: Product) => {
@@ -248,10 +278,42 @@ export default function ProductsPage() {
     }
   }
 
-  const filteredProducts = products.filter(p => 
+  const toggleProductStatus = async (id: string, isActive: boolean) => {
+    console.log('Toggling product:', id, 'to isActive:', isActive)
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isActive })
+      })
+      
+      if (res.ok) {
+        const updated = await res.json()
+        console.log('Updated product:', updated)
+        fetchData()
+      } else {
+        console.error('Toggle failed:', res.status)
+      }
+    } catch (error) {
+      console.error("Failed to toggle status:", error)
+    }
+  }
+
+  // Filter by search query
+  const searchFiltered = products.filter(p => 
     p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     p.category.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
+
+  // Filter by tab (all/active/inactive)
+  const filteredProducts = searchFiltered.filter(p => {
+    if (filterTab === "active") return p.isActive
+    if (filterTab === "inactive") return !p.isActive
+    return true
+  })
+
+  const activeCount = products.filter(p => p.isActive).length
+  const inactiveCount = products.filter(p => !p.isActive).length
 
   if (loading) {
     return (
@@ -275,8 +337,16 @@ export default function ProductsPage() {
           <p className="text-stone-500 mt-1">Kelola produk kafe</p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative">
+        <div className="flex flex-col sm:flex-row gap-3 items-center">
+          <Tabs value={filterTab} onValueChange={(v) => setFilterTab(v as typeof filterTab)} className="w-full sm:w-auto">
+            <TabsList className="grid w-full grid-cols-3 sm:w-auto">
+              <TabsTrigger value="all">Semua ({products.length})</TabsTrigger>
+              <TabsTrigger value="active">Aktif ({activeCount})</TabsTrigger>
+              <TabsTrigger value="inactive">Nonaktif ({inactiveCount})</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          <div className="relative w-full sm:w-auto">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
             <Input
               placeholder="Cari produk..."
@@ -561,7 +631,13 @@ export default function ProductsPage() {
               </TableHeader>
               <TableBody>
                 {filteredProducts.map((product) => (
-                  <TableRow key={product.id} className="hover:bg-amber-50/30 transition-colors">
+                  <TableRow 
+                    key={product.id} 
+                    className={cn(
+                      "hover:bg-amber-50/30 transition-colors",
+                      !product.isActive && "opacity-50 bg-stone-50"
+                    )}
+                  >
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-linear-to-br from-amber-100 to-orange-100 rounded-xl flex items-center justify-center overflow-hidden">
@@ -600,6 +676,18 @@ export default function ProductsPage() {
                         <Button 
                           variant="ghost" 
                           size="icon" 
+                          onClick={() => toggleProductStatus(product.id, !product.isActive)}
+                          className={product.isActive 
+                            ? "h-8 w-8 hover:bg-amber-50 hover:text-amber-600" 
+                            : "h-8 w-8 hover:bg-green-50 hover:text-green-600"
+                          }
+                          title={product.isActive ? "Nonaktifkan" : "Aktifkan"}
+                        >
+                          {product.isActive ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
                           onClick={() => openEditDialog(product)}
                           className="h-8 w-8 hover:bg-blue-50 hover:text-blue-600"
                         >
@@ -608,7 +696,7 @@ export default function ProductsPage() {
                         <Button 
                           variant="ghost" 
                           size="icon" 
-                          onClick={() => handleDelete(product.id)}
+                          onClick={() => openDeleteDialog(product)}
                           className="h-8 w-8 hover:bg-red-50 hover:text-red-600"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -632,6 +720,28 @@ export default function ProductsPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus Produk?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Apakah Anda yakin ingin menghapus <span className="font-semibold text-stone-900">{productToDelete?.name}</span>? 
+              Tindakan ini tidak dapat dibatalkan.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <Button
+              onClick={handleDelete}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Hapus
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

@@ -20,7 +20,7 @@ export function DashboardCharts({ weeklyData }: DashboardChartsProps) {
       {/* Revenue Chart */}
       <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-semibold text-stone-800">Pendapatan Mingguan</CardTitle>
+            <CardTitle className="text-lg font-semibold text-stone-800">Pendapatan Mingguan</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[280px]">

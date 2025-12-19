@@ -12,6 +12,7 @@ interface Product {
   price: number
   imageUrl?: string | null
   categoryId: string
+  isActive?: boolean
   variants?: {
     sizes?: string[]
     temperatures?: string[]
@@ -66,9 +67,10 @@ export function ProductGrid({ onAddToCart }: ProductGridProps) {
   }
 
   const filteredProducts = products.filter((product) => {
+    const isActive = product.isActive !== false
     const matchesCategory = !activeCategory || product.categoryId === activeCategory
     const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase())
-    return matchesCategory && matchesSearch
+    return isActive && matchesCategory && matchesSearch
   })
 
   if (loading) {

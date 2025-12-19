@@ -55,6 +55,24 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params
+    
+    // Check if category has products
+    const category = await db.category.findUnique({
+      where: { id },
+      include: { _count: { select: { products: true } } }
+    })
+
+    if (!category) {
+      return NextResponse.json({ error: "Category not found" }, { status: 404 })
+    }
+
+    if (category._count.products > 0) {
+      return NextResponse.json(
+        { error: `Kategori ini tidak dapat dihapus karena masih ada ${category._count.products} produk dalam kategori ini. Hapus atau pindahkan produk terlebih dahulu.` },
+        { status: 400 }
+      )
+    }
+
     await db.category.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (error) {

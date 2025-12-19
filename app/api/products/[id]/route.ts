@@ -56,6 +56,24 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params
+    
+    // Check if product has order items
+    const product = await db.product.findUnique({
+      where: { id },
+      include: { _count: { select: { orderItems: true } } }
+    })
+
+    if (!product) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 })
+    }
+
+    if (product._count.orderItems > 0) {
+      return NextResponse.json(
+        { error: `Produk ini tidak dapat dihapus karena sudah ada ${product._count.orderItems} pesanan yang menggunakan produk ini.` },
+        { status: 400 }
+      )
+    }
+
     await db.product.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (error) {

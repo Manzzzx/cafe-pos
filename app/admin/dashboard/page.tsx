@@ -17,7 +17,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { db } from "@/lib/db"
-import { startOfDay, endOfDay, subDays, format } from "date-fns"
+import { startOfDay, endOfDay, subDays, format, startOfWeek, differenceInDays } from "date-fns"
 import { id } from "date-fns/locale"
 import { DashboardCharts } from "./DashboardCharts"
 
@@ -60,9 +60,9 @@ async function getDashboardStats() {
     ? ((todayOrders.length - yesterdayOrders.length) / yesterdayOrders.length) * 100 
     : 0
 
-  // Recent orders
+  // Recent orders (10 items instead of 5)
   const recentOrders = await db.order.findMany({
-    take: 5,
+    take: 10,
     orderBy: { createdAt: "desc" },
     include: { 
       items: { include: { product: true } },
@@ -91,6 +91,42 @@ async function getDashboardStats() {
     })
   }
 
+  // Top Products (last 7 days)
+  const startWeek = startOfDay(subDays(today, 6))
+  const topProducts = await db.orderItem.groupBy({
+    by: ['productId'],
+    where: {
+      order: {
+        createdAt: { gte: startWeek, lte: endToday },
+        status: { not: "CANCELLED" }
+      }
+    },
+    _sum: {
+      quantity: true
+    },
+    orderBy: {
+      _sum: {
+        quantity: 'desc'
+      }
+    },
+    take: 10
+  })
+
+  const topProductsWithDetails = await Promise.all(
+    topProducts.map(async (item) => {
+      const product = await db.product.findUnique({
+        where: { id: item.productId },
+        include: { category: true }
+      })
+      return {
+        id: item.productId,
+        name: product?.name || 'Unknown',
+        quantity: item._sum.quantity || 0,
+        category: product?.category?.name || 'Uncategorized'
+      }
+    })
+  )
+
   return {
     todayRevenue,
     todayOrders: todayOrders.length,
@@ -99,7 +135,8 @@ async function getDashboardStats() {
     revenueChange,
     ordersChange,
     recentOrders,
-    weeklyData
+    weeklyData,
+    topProducts: topProductsWithDetails
   }
 }
 
@@ -128,44 +165,44 @@ export default async function AdminDashboardPage() {
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 space-y-6">
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white overflow-hidden">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <p className="text-sm text-stone-500">Pendapatan Hari Ini</p>
-                <p className="text-2xl font-bold text-stone-800">{formatCurrency(stats.todayRevenue)}</p>
-                <div className="flex items-center gap-1 text-xs">
-                  {stats.revenueChange >= 0 ? (
-                    <>
-                      <ArrowUpRight className="h-3 w-3 text-emerald-500" />
-                      <span className="text-emerald-600">+{stats.revenueChange.toFixed(1)}%</span>
-                    </>
-                  ) : (
-                    <>
-                      <ArrowDownRight className="h-3 w-3 text-red-500" />
-                      <span className="text-red-600">{stats.revenueChange.toFixed(1)}%</span>
-                    </>
-                  )}
-                  <span className="text-stone-400">vs kemarin</span>
-                </div>
-              </div>
-              <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                <DollarSign className="h-7 w-7 text-white" />
+    <div className="space-y-6">
+      {/* KPI HERO - Pendapatan Hari Ini */}
+      <Card className="border-0 shadow-xl shadow-emerald-500/20 bg-linear-to-br from-emerald-500 to-emerald-600 overflow-hidden">
+        <CardContent className="p-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="space-y-2">
+              <p className="text-emerald-100 text-sm font-medium">Pendapatan Hari Ini</p>
+              <p className="text-4xl md:text-5xl font-bold text-white">{formatCurrency(stats.todayRevenue)}</p>
+              <div className="flex items-center gap-2 text-sm">
+                {stats.revenueChange >= 0 ? (
+                  <>
+                    <ArrowUpRight className="h-4 w-4 text-white" />
+                    <span className="text-white font-medium">+{stats.revenueChange.toFixed(1)}%</span>
+                  </>
+                ) : (
+                  <>
+                    <ArrowDownRight className="h-4 w-4 text-white" />
+                    <span className="text-white font-medium">{stats.revenueChange.toFixed(1)}%</span>
+                  </>
+                )}
+                <span className="text-emerald-100">dibanding kemarin</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+            <div className="h-20 w-20 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <DollarSign className="h-12 w-12 text-white" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-        <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white overflow-hidden">
+      {/* KPI SEKUNDER - 3 Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
                 <p className="text-sm text-stone-500">Total Pesanan</p>
-                <p className="text-2xl font-bold text-stone-800">{stats.todayOrders}</p>
+                <p className="text-3xl font-bold text-stone-800">{stats.todayOrders}</p>
                 <div className="flex items-center gap-1 text-xs">
                   {stats.ordersChange >= 0 ? (
                     <>
@@ -188,27 +225,12 @@ export default async function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white overflow-hidden">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <p className="text-sm text-stone-500">Item Terjual</p>
-                <p className="text-2xl font-bold text-stone-800">{stats.todayItemsSold}</p>
-                <p className="text-xs text-stone-400">hari ini</p>
-              </div>
-              <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
-                <Coffee className="h-7 w-7 text-white" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white overflow-hidden">
+        <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
                 <p className="text-sm text-stone-500">Rata-rata Order</p>
-                <p className="text-2xl font-bold text-stone-800">{formatCurrency(stats.avgOrderValue)}</p>
+                <p className="text-3xl font-bold text-stone-800">{formatCurrency(stats.avgOrderValue)}</p>
                 <p className="text-xs text-stone-400">per transaksi</p>
               </div>
               <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
@@ -217,74 +239,101 @@ export default async function AdminDashboardPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
 
-      {/* Charts Section */}
-      <DashboardCharts weeklyData={stats.weeklyData} />
-
-      {/* Quick Links & Recent Orders */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Quick Actions */}
         <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg font-semibold text-stone-800">Menu Cepat</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {quickLinks.map((link) => {
-              const Icon = link.icon
-              return (
-                <Link href={link.href} key={link.href}>
-                  <div className="flex items-center gap-4 p-3 rounded-xl hover:bg-stone-50 transition-colors cursor-pointer group">
-                    <div className={`h-10 w-10 rounded-xl bg-linear-to-br ${link.color} flex items-center justify-center shadow-md group-hover:scale-105 transition-transform`}>
-                      <Icon className="h-5 w-5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-stone-700">{link.label}</p>
-                      <p className="text-xs text-stone-400">Kelola {link.label.toLowerCase()}</p>
-                    </div>
-                  </div>
-                </Link>
-              )
-            })}
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="text-sm text-stone-500">Item Terjual</p>
+                <p className="text-3xl font-bold text-stone-800">{stats.todayItemsSold}</p>
+                <p className="text-xs text-stone-400">hari ini</p>
+              </div>
+              <div className="h-14 w-14 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
+                <Coffee className="h-7 w-7 text-white" />
+              </div>
+            </div>
           </CardContent>
         </Card>
+      </div>
 
-        {/* Recent Orders */}
-        <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white lg:col-span-2">
-          <CardHeader className="pb-3 flex flex-row items-center justify-between">
-            <CardTitle className="text-lg font-semibold text-stone-800">Pesanan Terbaru</CardTitle>
-            <Link href="/admin/orders" className="text-sm text-amber-600 hover:text-amber-700 font-medium">
-              Lihat Semua
-            </Link>
+      {/* GRAFIK UTAMA */}
+      <DashboardCharts weeklyData={stats.weeklyData} />
+
+      {/* DETAIL OPERASIONAL - 2 Columns */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Pesanan Terbaru */}
+        <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg font-semibold text-stone-800">Pesanan Terbaru</CardTitle>
+              <Link href="/admin/orders" className="text-sm text-amber-600 hover:text-amber-700 font-medium transition-colors">
+                Lihat Semua
+              </Link>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {stats.recentOrders.length > 0 ? (
                 stats.recentOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-3 rounded-xl bg-stone-50/50 hover:bg-stone-50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-sm">
+                  <div key={order.id} className="flex items-center justify-between p-3 rounded-lg bg-stone-50/50 hover:bg-stone-100/70 transition-colors">
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="w-8 h-8 rounded-lg bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-bold text-xs">
                         {order.items.length}
                       </div>
-                      <div>
-                        <p className="font-medium text-stone-700">{order.orderNumber}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-stone-700 truncate">{order.orderNumber}</p>
                         <p className="text-xs text-stone-400">
                           {order.customerName || "Guest"} • {format(new Date(order.createdAt), "HH:mm")}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Badge className={statusColors[order.status]}>
+                    <div className="flex items-center gap-2">
+                      <Badge className={statusColors[order.status]} variant="secondary">
                         {order.status}
                       </Badge>
-                      <p className="font-semibold text-stone-700">{formatCurrency(order.totalAmount)}</p>
+                      <p className="font-semibold text-stone-700 text-sm">{formatCurrency(order.totalAmount)}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="text-center py-8 text-stone-400">
-                  <Coffee className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                  <p>Belum ada pesanan hari ini</p>
+                <div className="text-center py-12 text-stone-400">
+                  <Coffee className="h-12 w-12 mx-auto mb-3 opacity-30" />
+                  <p className="font-medium">Belum ada pesanan hari ini</p>
+                  <p className="text-xs mt-1">Data akan muncul setelah pesanan masuk</p>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Top Produk */}
+        <Card className="border-0 shadow-lg shadow-stone-200/50 bg-white">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-semibold text-stone-800">Top Produk Minggu Ini</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {stats.topProducts.length > 0 ? (
+                stats.topProducts.map((product, index) => (
+                  <div key={product.id} className="flex items-center gap-3 p-3 rounded-lg bg-stone-50/50 hover:bg-stone-100/70 transition-colors">
+                    <div className="w-8 h-8 rounded-lg bg-linear-to-br from-stone-600 to-stone-700 flex items-center justify-center text-white font-bold text-sm">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-stone-700 truncate">{product.name}</p>
+                      <p className="text-xs text-stone-400">{product.category}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold text-stone-700">{product.quantity}</p>
+                      <p className="text-xs text-stone-400">terjual</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-12 text-stone-400">
+                  <Package className="h-12 w-12 mx-auto mb-3 opacity-30" />
+                  <p className="font-medium">Belum ada data produk</p>
+                  <p className="text-xs mt-1">Data akan muncul setelah pesanan masuk</p>
                 </div>
               )}
             </div>

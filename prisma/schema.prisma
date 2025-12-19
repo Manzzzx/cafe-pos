@@ -89,11 +89,18 @@ enum Role {
 }
 
 enum CategoryType {
-  COFFEE
-  TEA
-  SNACK
-  DESSERT
+  COFFEE        // Kopi
+  TEA           // Teh  
+  NON_COFFEE    // Minuman non-kopi (chocolate, milk, etc)
+  JUICE         // Jus & Smoothie
+  SNACK         // Snack ringan
+  PASTRY        // Pastry & Bakery
+  DESSERT       // Dessert & Cake
+  MAIN_COURSE   // Makanan berat
+  APPETIZER     // Pembuka
+  OTHER         // Lainnya
 }
+
 
 enum OrderStatus {
   PENDING
