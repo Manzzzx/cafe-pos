@@ -20,12 +20,30 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    
+    // Validate required fields
+    if (!body.name || !body.type) {
+      return NextResponse.json(
+        { error: "Name and type are required" },
+        { status: 400 }
+      )
+    }
+
+    // Validate CategoryType enum
+    const validTypes = ["COFFEE", "TEA", "NON_COFFEE", "JUICE", "SNACK", "PASTRY", "DESSERT", "MAIN_COURSE", "APPETIZER", "OTHER"]
+    if (!validTypes.includes(body.type)) {
+      return NextResponse.json(
+        { error: `Invalid category type. Must be one of: ${validTypes.join(", ")}` },
+        { status: 400 }
+      )
+    }
+
     const category = await db.category.create({ data: body })
     return NextResponse.json(category, { status: 201 })
-  } catch (error) {
+  } catch (error: any) {
     console.error("Create category error:", error)
     return NextResponse.json(
-      { error: "Failed to create category" },
+      { error: error.message || "Failed to create category" },
       { status: 500 }
     )
   }

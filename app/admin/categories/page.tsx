@@ -117,9 +117,14 @@ export default function CategoriesPage() {
         setDialogOpen(false)
         resetForm()
         fetchCategories()
+      } else {
+        const errorData = await res.json()
+        console.error('Failed to save category:', errorData)
+        alert(`Gagal menyimpan kategori: ${errorData.error || 'Unknown error'}`)
       }
     } catch (error) {
       console.error("Failed to save category:", error)
+      alert('Gagal menyimpan kategori')
     } finally {
       setSaving(false)
     }
@@ -188,9 +193,6 @@ export default function CategoriesPage() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-stone-800 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
-              <FolderTree className="h-5 w-5 text-white" />
-            </div>
             Manajemen Kategori
           </h1>
           <p className="text-stone-500 mt-1">Kelola kategori produk</p>
