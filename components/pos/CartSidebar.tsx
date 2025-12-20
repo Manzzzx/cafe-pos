@@ -14,7 +14,7 @@ interface CartSidebarProps {
 }
 
 export function CartSidebar({ onCheckout }: CartSidebarProps) {
-  const { items, removeItem, updateQuantity, updateNotes, getTotal, getTax, getGrandTotal, clearCart, getItemCount } =
+  const { items, orderType, removeItem, updateQuantity, updateNotes, setOrderType, getTotal, getTax, getGrandTotal, clearCart, getItemCount } =
     useCartStore()
   const [customerName, setCustomerName] = useState("")
 
@@ -31,7 +31,7 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
       className="w-80 lg:w-96 bg-white border-l flex flex-col h-screen sticky top-0"
       style={{ borderColor: 'var(--coffee-latte)' }}
     >
-      {/* Header - Espresso Dark */}
+      {/* Header */}
       <div 
         className="p-4 border-b"
         style={{ 
@@ -44,7 +44,8 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
           Current Order
           {getItemCount() > 0 && (
             <span 
-              className="ml-auto text-sm font-bold px-2.5 py-0.5 rounded-full"
+              key={getItemCount()}
+              className="ml-auto text-sm font-bold px-2.5 py-0.5 rounded-full animate-pulse-badge"
               style={{ 
                 backgroundColor: 'var(--coffee-caramel)',
                 color: 'var(--coffee-darker)'
@@ -56,15 +57,42 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
         </h2>
       </div>
 
-      {/* Customer Name Input */}
-      <div className="p-3 border-b" style={{ borderColor: 'var(--coffee-latte)', backgroundColor: 'var(--coffee-bg)' }}>
+      {/* Order Type Toggle + Customer Name */}
+      <div className="p-3 border-b space-y-2" style={{ borderColor: 'var(--coffee-latte)', backgroundColor: 'var(--coffee-bg)' }}>
+        {/* Order Type Toggle */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setOrderType("dineIn")}
+            className={`flex-1 py-2 px-3 rounded-full text-sm font-medium transition-all ${
+              orderType === "dineIn"
+                ? "bg-coffee-primary text-white shadow-md"
+                : "bg-white text-coffee-dark border"
+            }`}
+            style={orderType === "dineIn" ? { backgroundColor: 'var(--coffee-primary)' } : { borderColor: 'var(--coffee-latte)' }}
+          >
+            🍽️ Dine-in
+          </button>
+          <button
+            onClick={() => setOrderType("takeAway")}
+            className={`flex-1 py-2 px-3 rounded-full text-sm font-medium transition-all ${
+              orderType === "takeAway"
+                ? "bg-coffee-primary text-white shadow-md"
+                : "bg-white text-coffee-dark border"
+            }`}
+            style={orderType === "takeAway" ? { backgroundColor: 'var(--coffee-primary)' } : { borderColor: 'var(--coffee-latte)' }}
+          >
+            🥤 Take Away
+          </button>
+        </div>
+        
+        {/* Customer Name Input */}
         <div className="relative">
           <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: 'var(--coffee-latte)' }} />
           <Input
             placeholder="Nama pelanggan..."
             value={customerName}
             onChange={(e) => setCustomerName(e.target.value)}
-            className="pl-10 h-10 rounded-full border-2 text-sm"
+            className="pl-10 h-11 rounded-full border-2 text-sm font-medium"
             style={{ borderColor: 'var(--coffee-latte)', backgroundColor: 'white' }}
           />
         </div>
@@ -73,15 +101,15 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
       {/* Items - Scrollable */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3 scrollbar-coffee" style={{ backgroundColor: 'var(--coffee-bg)' }}>
         {items.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center" style={{ color: 'var(--coffee-latte)' }}>
+          <div className="h-full flex flex-col items-center justify-center px-6" style={{ color: 'var(--coffee-latte)' }}>
             <div 
-              className="w-20 h-20 rounded-full flex items-center justify-center mb-4"
+              className="w-28 h-28 rounded-full flex items-center justify-center mb-5 animate-bounce-in"
               style={{ backgroundColor: 'var(--coffee-cream)' }}
             >
-              <Coffee className="h-10 w-10" style={{ color: 'var(--coffee-latte)' }} />
+              <Coffee className="h-14 w-14" style={{ color: 'var(--coffee-latte)' }} />
             </div>
-            <p className="text-center font-medium" style={{ color: 'var(--coffee-dark)' }}>Keranjang kosong</p>
-            <p className="text-sm text-center mt-1" style={{ color: 'var(--coffee-latte)' }}>Pilih menu untuk memulai</p>
+            <p className="text-center font-semibold text-lg mb-2" style={{ color: 'var(--coffee-dark)' }}>Keranjang kosong</p>
+            <p className="text-sm text-center" style={{ color: 'var(--coffee-latte)' }}>Pilih menu favorit untuk memulai pesanan</p>
           </div>
         ) : (
           items.map((item) => (
@@ -125,24 +153,25 @@ export function CartSidebar({ onCheckout }: CartSidebarProps) {
             <Button 
               variant="outline" 
               onClick={clearCart} 
-              className="flex-1 rounded-full font-medium"
+              className="flex-1 rounded-full font-medium transition-smooth hover:bg-red-50 hover:text-red-600 hover:border-red-300"
               style={{ 
                 borderColor: 'var(--coffee-latte)',
                 color: 'var(--coffee-dark)'
               }}
             >
-              Batal
+              <Trash2 className="h-4 w-4 mr-1" />
+              Clear All
             </Button>
             <Button 
               onClick={handleCheckout} 
-              className="flex-1 rounded-full font-semibold shadow-lg"
+              className="flex-2 rounded-full font-semibold shadow-lg transition-smooth hover:scale-105"
               style={{
                 background: 'linear-gradient(135deg, var(--coffee-caramel) 0%, var(--coffee-accent) 100%)',
                 color: 'var(--coffee-darker)',
                 boxShadow: '0 4px 12px rgba(212, 165, 116, 0.4)'
               }}
             >
-              Bayar
+              💳 Bayar Sekarang
             </Button>
           </div>
         </div>

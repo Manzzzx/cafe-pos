@@ -87,15 +87,15 @@ export function ProductGrid({ onAddToCart }: ProductGridProps) {
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-coffee-bg overflow-hidden" style={{ backgroundColor: 'var(--coffee-bg)' }}>
+    <div className="flex-1 flex flex-col overflow-hidden bg-warm-gradient">
       {/* Header */}
-      <div className="bg-white border-b p-4 space-y-4" style={{ borderColor: 'var(--coffee-latte)' }}>
+      <div className="bg-white border-b p-4 space-y-4 shadow-sm" style={{ borderColor: 'var(--coffee-latte)' }}>
         {/* Search with Filter Button */}
         <div className="flex gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5" style={{ color: 'var(--coffee-latte)' }} />
             <Input
-              placeholder="Cari menu kopi..."
+              placeholder="Cari menu kopi... (tekan / untuk fokus)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-12 h-12 bg-white rounded-full text-base border-2 focus:border-[#6F4E37] transition-colors"
@@ -144,7 +144,7 @@ export function ProductGrid({ onAddToCart }: ProductGridProps) {
       {/* Products Grid */}
       <div className="flex-1 overflow-y-auto p-4 scrollbar-coffee">
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}

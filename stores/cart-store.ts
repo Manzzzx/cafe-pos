@@ -17,10 +17,12 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[]
+  orderType: "dineIn" | "takeAway"
   addItem: (item: Omit<CartItem, "id">) => void
   removeItem: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
   updateNotes: (id: string, notes: string) => void
+  setOrderType: (type: "dineIn" | "takeAway") => void
   clearCart: () => void
   getTotal: () => number
   getTax: () => number
@@ -32,6 +34,7 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      orderType: "dineIn" as "dineIn" | "takeAway",
 
       addItem: (item) => {
         const state = get()
@@ -84,6 +87,8 @@ export const useCartStore = create<CartStore>()(
           ),
         }))
       },
+
+      setOrderType: (type) => set({ orderType: type }),
 
       clearCart: () => set({ items: [] }),
 

@@ -64,7 +64,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
   return (
     <>
       <Card
-        className="cursor-pointer group bg-white border overflow-hidden transition-all duration-300 hover:-translate-y-1"
+        className="cursor-pointer group bg-white border overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02]"
         style={{ 
           borderColor: 'var(--coffee-latte)',
           borderRadius: '1rem',
@@ -72,10 +72,12 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
         }}
         onClick={handleClick}
         onMouseEnter={(e) => {
-          e.currentTarget.style.boxShadow = '0 8px 24px rgba(60, 42, 33, 0.12)'
+          e.currentTarget.style.boxShadow = '0 12px 32px rgba(60, 42, 33, 0.18)'
+          e.currentTarget.classList.add('animate-pop')
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.boxShadow = '0 2px 8px rgba(60, 42, 33, 0.06)'
+          e.currentTarget.classList.remove('animate-pop')
         }}
       >
         <CardContent className="p-0">
@@ -115,11 +117,11 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
               </Button>
             </div>
 
-            {/* Variant badges */}
+            {/* Variant badges - Relocated to bottom-left with backdrop blur */}
             {hasVariants && (
-              <div className="absolute top-2 right-2 flex gap-1">
+              <div className="absolute bottom-2 left-2 flex gap-1">
                 {product.variants?.temperatures?.includes("Iced") && (
-                  <Badge className="bg-blue-500/90 text-white text-xs border-0 rounded-full">
+                  <Badge className="badge-blur text-white text-xs border-0 rounded-full px-2 py-1">
                     <Snowflake className="h-3 w-3 mr-1" />
                     Ice
                   </Badge>
@@ -147,7 +149,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
               {product.name}
             </h3>
             <p 
-              className="font-bold mt-1 text-lg"
+              className="font-bold mt-2 text-xl"
               style={{ color: 'var(--coffee-caramel)' }}
             >
               {formatCurrency(product.price)}

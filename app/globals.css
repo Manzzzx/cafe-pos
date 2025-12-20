@@ -286,3 +286,169 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;  /* Chrome, Safari, Opera */
 }
+
+/* ===== ENHANCED ANIMATIONS ===== */
+
+/* Pop Animation - For Product Card Clicks */
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-pop {
+  animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Flying to Cart Animation */
+@keyframes flyToCart {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(50%, -50%) scale(0.5);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(100%, -100%) scale(0.2);
+    opacity: 0;
+  }
+}
+
+.animate-fly-to-cart {
+  animation: flyToCart 0.6s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+}
+
+/* Pulse Badge Animation */
+@keyframes pulseBadge {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-pulse-badge {
+  animation: pulseBadge 0.4s ease-out;
+}
+
+/* Skeleton Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--coffee-cream) 25%,
+    var(--coffee-latte) 50%,
+    var(--coffee-cream) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}
+
+.skeleton-text {
+  height: 1rem;
+  background: linear-gradient(
+    90deg,
+    var(--coffee-cream) 25%,
+    var(--coffee-latte) 50%,
+    var(--coffee-cream) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.25rem;
+}
+
+/* Slide In Animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Bounce In Animation */
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ===== ENHANCED COLOR UTILITIES ===== */
+
+/* Warm Gradient Background */
+.bg-warm-gradient {
+  background: linear-gradient(135deg, #FFFBF5 0%, #FFF8F0 50%, #FAF8F5 100%);
+}
+
+/* Glass Morphism Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Enhanced Badge Backdrop Blur */
+.badge-blur {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Hover Lift Effect */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(60, 42, 33, 0.15);
+}
+
+/* Quick Transition Utility */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.transition-fast {
+  transition: all 0.15s ease-out;
+}
