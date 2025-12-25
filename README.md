@@ -26,7 +26,6 @@
 - [Available Scripts](#-available-scripts)
 - [Troubleshooting](#-troubleshooting)
 - [Contributing](#-contributing)
-- [License](#-license)
 
 ---
 
@@ -293,7 +292,7 @@ Comprehensive product catalog system:
 ## 📁 Project Structure
 
 ```
-coffee-shop-pos/
+cafe-pos/
 │
 ├── 📂 app/                          # Next.js App Router
 │   ├── 📂 admin/                    # Admin dashboard & management
@@ -410,8 +409,8 @@ Optional:
 #### 1. Clone Repository
 
 ```bash
-git clone https://github.com/your-username/coffee-shop-pos.git
-cd coffee-shop-pos
+git clone https://github.com/manzzzx/cafe-pos.git
+cd cafe-pos
 ```
 
 #### 2. Install Dependencies
@@ -1198,8 +1197,8 @@ Kontribusi sangat kami apresiasi! Ikuti langkah berikut:
 
 ```bash
 # Fork di GitHub, lalu clone
-git clone https://github.com/your-username/coffee-shop-pos.git
-cd coffee-shop-pos
+git clone https://github.com/manzzzx/cafe-pos.git
+cd cafe-pos
 ```
 
 2. **Create Feature Branch**
@@ -1302,37 +1301,6 @@ If applicable
 - Node version: [e.g., 18.17.0]
 ```
 
----
-
-## 📝 License
-
-This project is licensed under the **MIT License**.
-
-```
-MIT License
-
-Copyright (c) 2024 Kafe POS Team
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
-See [LICENSE.md](LICENSE.md) for full license text.
 
 ---
 
@@ -1356,8 +1324,8 @@ Special thanks to:
 
 ## 📞 Contact & Support
 
-- **GitHub Issues**: [Report bugs atau request features](https://github.com/your-username/coffee-shop-pos/issues)
-- **Discussions**: [Ask questions](https://github.com/your-username/coffee-shop-pos/discussions)
+- **GitHub Issues**: [Report bugs atau request features](https://github.com/Manzzzx/cafe-pos/issues)
+- **Discussions**: [Ask questions](https://github.com/Manzzzx/cafe-pos/discussions)
 
 ---
 
@@ -1395,7 +1363,7 @@ Special thanks to:
 
 **Kafe POS** - Empowering Cafe with Modern Technology
 
-[⭐ Star this repo](https://github.com/your-username/coffee-shop-pos) | [🐛 Report Bug](https://github.com/your-username/coffee-shop-pos/issues) | [✨ Request Feature](https://github.com/your-username/coffee-shop-pos/issues)
+[⭐ Star this repo](https://github.com/manzzzx/cafe-pos) | [🐛 Report Bug](https://github.com/manzzzx/cafe-pos/issues) | [✨ Request Feature](https://github.com/manzzzx/cafe-pos/issues)
 
 ---
 
