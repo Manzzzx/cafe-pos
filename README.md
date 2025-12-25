@@ -1,8 +1,5 @@
 # ☕ Kafe POS
 
-> **Modern Point of Sale System for Coffee Shops & Cafes**  
-> Enterprise-grade POS solution with real-time kitchen display, role-based access control, and beautiful coffee-themed UI.
-
 ![Next.js](https://img.shields.io/badge/Next.js-16.0-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38bdf8?logo=tailwindcss)
