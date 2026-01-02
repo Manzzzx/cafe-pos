@@ -449,7 +449,7 @@ Edit `.env` dan isi dengan konfigurasi Anda:
 
 ```env
 # Database
-DATABASE_URL="postgresql://username:password@localhost:5432/coffee_pos"
+DATABASE_URL="postgresql://username:password@localhost:5432/caffee_pos"
 
 # NextAuth Configuration
 NEXTAUTH_SECRET="generate-random-secret-here"
@@ -1201,7 +1201,7 @@ cd cafe-pos
 2. **Create Feature Branch**
 
 ```bash
-git checkout -b feature/nama-fitur-anda
+git checkout -b feature/nama-fitur
 ```
 
 3. **Make Changes**
@@ -1228,7 +1228,7 @@ npm run dev
 
 ```bash
 git add .
-git commit -m "feat: deskripsi fitur anda"
+git commit -m "feat: deskripsi fitur"
 ```
 
 Commit message format:
@@ -1243,7 +1243,7 @@ Commit message format:
 6. **Push & Create PR**
 
 ```bash
-git push origin feature/nama-fitur-anda
+git push origin feature/nama-fitur
 ```
 
 Buat Pull Request di GitHub dengan:
@@ -1326,33 +1326,6 @@ Special thanks to:
 
 ---
 
-## 🗺️ Roadmap
-
-### Version 2.0 (Planned)
-
-- [ ] **Multi-branch Support** - Support untuk multiple cafe locations
-- [ ] **Inventory Management** - Stock tracking dan low-stock alerts
-- [ ] **Loyalty Program** - Customer points dan rewards
-- [ ] **Advanced Analytics** - Sales forecasting dan trends
-- [ ] **Mobile App** - React Native app untuk iOS/Android
-- [ ] **WhatsApp Integration** - Order notifications
-- [ ] **Receipt Printing** - Thermal printer support
-- [ ] **Shift Management** - Cashier shift tracking
-- [ ] **Table Management** - Visual table layout
-- [ ] **Online Ordering** - Customer-facing order website
-
-### Version 1.5 (Coming Soon)
-
-- [ ] Dark/Light theme toggle
-- [ ] Export reports to PDF/Excel
-- [ ] Product search autocomplete
-- [ ] Order filters dan advanced search
-- [ ] Batch product import (CSV)
-- [ ] Email notifications
-- [ ] Discount coupons
-- [ ] Multi-currency support
-
----
 
 <div align="center">
 
@@ -1363,7 +1336,5 @@ Special thanks to:
 [⭐ Star this repo](https://github.com/manzzzx/cafe-pos) | [🐛 Report Bug](https://github.com/manzzzx/cafe-pos/issues) | [✨ Request Feature](https://github.com/manzzzx/cafe-pos/issues)
 
 ---
-
-© 2024 Kafe POS Team. All rights reserved.
 
 </div>
